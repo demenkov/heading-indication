@@ -4,6 +4,7 @@ jQuery(document).ready(function($) {
 	//add date interactivity
 	$.fn.datepicker.DPGlobal.dates.daysMin = ["Сб", "По", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 	$.fn.datepicker.DPGlobal.dates.months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+	$.fn.datepicker.DPGlobal.dates.monthsShort = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
 	$('#inputDate').datepicker({
 		format : 'dd.mm.yyyy',
 		weekStart : 1
