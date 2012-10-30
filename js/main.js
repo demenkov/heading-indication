@@ -19,10 +19,10 @@ jQuery(document).ready(function($) {
 	})
 	.siblings('span.add-on')
 	.on('click', function(e) {
-		$('#inputDate').trigger('focus');
+		$('#inputDate').datepicker('show');
 		e.stopPropagation();
 		$('body').on('click', function() {
-			$('#inputDate').trigger('blur');
+			$('#inputDate').datepicker('hide');
 		});
 	});
 	//add time interactivity

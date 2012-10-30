@@ -35,7 +35,7 @@
 		
 		if (this.isInput) {
 			this.element.on({
-				focus: $.proxy(this.show, this),
+				//focus: $.proxy(this.show, this),
 				blur: $.proxy(this.hide, this),
 				keyup: $.proxy(this.update, this)
 			});
