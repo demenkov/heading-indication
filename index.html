@@ -62,17 +62,34 @@
 								</div>
 							</div>
 						</div>
+						<div class="control-group">
+							<label class="control-label" for="timeZone">Часовой пояс</label>
+							<div class="controls nobr">
+								<input type="text" id="timeZone" class="input-small"  placeholder="3">
+								<div class="btn-group" data-toggle="buttons-radio">
+								<button type="button" class="btn active">З</button>
+								<button type="button" class="btn">В</button>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="starNum">Номер звезды</label>
+							<div class="controls">
+								<input type="text" id="starNum" class="input-small"  placeholder="1">
+							</div>
+						</div>
 					</div>
 					<div class="span8">
 						<div class="control-group">
 							<label class="control-label" for="inputLatitude">Широта</label>
 							<div class="controls nobr">
-								<div class="input-append bootstrap-timepicker-component">
-									<input type="text" id="inputLatitude" class="input-mini">
+								<div class="input-append">
+									<input type="text" id="inputLatitude" class="input-mini" placeholder="55">
 									<span class="add-on">
 										<i>&deg;</i>
 									</span>
 								</div>
+								<input type="text" id="inputLatitudeSec" class="input-mini" placeholder="51.0">
 								<div class="btn-group" data-toggle="buttons-radio">
 									<button type="button" class="btn active">С</button>
 									<button type="button" class="btn">Ю</button>
@@ -82,16 +99,23 @@
 						<div class="control-group">
 							<label class="control-label" for="inputLongitude">Долгота</label>
 							<div class="controls nobr">
-								<div class="input-append bootstrap-timepicker-component">
-									<input type="text" id="inputLongitude" class="input-mini">
+								<div class="input-append">
+									<input type="text" id="inputLongitude" class="input-mini"  placeholder="14">
 									<span class="add-on">
 										<i>&deg;</i>
 									</span>
 								</div>
+								<input type="text" id="inputLongitudeSec" class="input-mini" placeholder="15.0">
 								<div class="btn-group" data-toggle="buttons-radio">
 								<button type="button" class="btn active">З</button>
 								<button type="button" class="btn">В</button>
 								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="cp">КП</label>
+							<div class="controls nobr">
+								<input type="text" id="cp" class="input-mini"  placeholder="270.0">
 							</div>
 						</div>
 					</div>

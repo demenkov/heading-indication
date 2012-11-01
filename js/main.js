@@ -2,9 +2,6 @@
 jQuery(document).ready(function($) {
 	"use strict";
 	//add date interactivity
-	/*$.fn.datepicker.DPGlobal.dates.daysMin = ["Сб", "По", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
-	$.fn.datepicker.DPGlobal.dates.months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-	$.fn.datepicker.DPGlobal.dates.monthsShort = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];*/
 	$('#inputDate').datepicker({
 		format : 'dd.mm.yyyy',
 		weekStart : 1,
@@ -21,11 +18,6 @@ jQuery(document).ready(function($) {
 	})
 	.siblings('span.add-on')
 	.on('click', function(e) {
-		/*$('#inputDate').datepicker('show');
-		e.stopPropagation();
-		$('body').on('click', function() {
-			$('#inputDate').datepicker('hide');
-		});*/
 		$('#inputDate').focus();
 	});
 	//add time interactivity
@@ -34,4 +26,29 @@ jQuery(document).ready(function($) {
 		showMeridian : false,
 		showSeconds	: true
 	});
+
+	$('#inputLatitude').add('#inputLongitude').on('change', calculate);
+
+	function calculate() {
+		var lat = parseFloat($('#inputLatitude').val());
+		var lng = parseFloat($('#inputLongitude').val());
+		
+		if (lat > 90) {
+			lat = 90;
+		}
+		if (lat < 0 || isNaN(lat)) {
+			lat = 0;
+		}
+		
+		if (lng > 180) {
+			lng = 180;
+		}
+
+		if (lng <0 || isNaN(lng)) {
+			lng = 0;
+		}
+		
+		$('#inputLatitude').val(lat);
+		$('#inputLongitude').val(lng);
+	}
 });
