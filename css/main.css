@@ -5,3 +5,11 @@ body {
 .nobr {
 	white-space:nowrap;
 }
+
+.page-header {
+	border-bottom: 1px solid #CCCCCC;
+}
+
+.bs-docs-separator {
+	border-color: #CCCCCC;
+}

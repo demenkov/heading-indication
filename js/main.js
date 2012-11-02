@@ -27,11 +27,39 @@ jQuery(document).ready(function($) {
 		showSeconds	: true
 	});
 
+	//change buttons state at the same time 
+	$('.westEast .btn.east').on('click', function(e) {
+		$('.westEast .btn.east').not($(this)).button('toggle');
+	});
+	$('.westEast .btn.west').on('click', function(e) {
+		$('.westEast .btn.west').not($(this)).button('toggle');
+	});
+
+	$('.northSouth button').on('click', function(e) {
+		var semisphere = $(this).hasClass('north') ? 'north' : 'south';
+		
+		if (!$('#starName option:selected').hasClass(semisphere)) {
+			$('#starName').select2('val', ($($('#starName option.' + semisphere)[0]).val()));
+		}
+	});
+	$("#starName").select2().on("change", function(e) {
+		if (!$('#starName option:selected').hasClass('north') && !$('.northSouth button.south').hasClass('active')) {
+			$('.northSouth button.south').button('toggle');
+		}
+		if (!$('#starName option:selected').hasClass('south') && !$('.northSouth button.north').hasClass('active')) {
+			$('.northSouth button.north').button('toggle');
+		}
+	});
+
 	$('#inputLatitude').add('#inputLongitude').on('change', calculate);
 
 	function calculate() {
-		var lat = parseFloat($('#inputLatitude').val());
-		var lng = parseFloat($('#inputLongitude').val());
+		fixInputs();
+	}
+
+	function fixInputs() {
+		var lat = $('#inputLatitude').val() ? parseFloat($('#inputLatitude').val()) : null;
+		var lng = $('#inputLongitude').val() ? parseFloat($('#inputLongitude').val()) : null;
 		
 		if (lat > 90) {
 			lat = 90;
@@ -44,7 +72,7 @@ jQuery(document).ready(function($) {
 			lng = 180;
 		}
 
-		if (lng <0 || isNaN(lng)) {
+		if (lng < 0 || isNaN(lng)) {
 			lng = 0;
 		}
 		

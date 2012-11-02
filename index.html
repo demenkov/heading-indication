@@ -10,6 +10,7 @@
 		<link rel="stylesheet" type="text/css" href="/css/datepicker.css" media="screen" />
 		<link rel="stylesheet" type="text/css" href="/css/timepicker.css" media="screen" />
 		<link rel="stylesheet" type="text/css" href="/css/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="/css/select2.css" media="screen" />
 
 		<title>Определение поправки курсоуказания</title>
 	</head>
@@ -34,12 +35,12 @@
 			</div>
 		</header>
 		<div class="container">
-
-			<h1>Определение поправки курсоуказания</h1>
-			<p>&nbsp;</p>
+			<div class="page-header">
+				<h1>Определение поправки курсоуказания</h1>
+			</div>
 			<form id = "navy" class="form-horizontal">
 				<div class="row">
-					<div class="span3">
+					<div class="span4">
 						<div class="control-group">
 							<label class="control-label" for="inputDate">Дата</label>
 							<div class="controls">
@@ -66,9 +67,9 @@
 							<label class="control-label" for="timeZone">Часовой пояс</label>
 							<div class="controls nobr">
 								<input type="text" id="timeZone" class="input-small"  placeholder="3">
-								<div class="btn-group" data-toggle="buttons-radio">
-								<button type="button" class="btn active">З</button>
-								<button type="button" class="btn">В</button>
+								<div class="btn-group westEast" data-toggle="buttons-radio">
+									<button type="button" class="btn west active">З</button>
+									<button type="button" class="btn east">В</button>
 								</div>
 							</div>
 						</div>
@@ -79,7 +80,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="span8">
+					<div class="span5">
 						<div class="control-group">
 							<label class="control-label" for="inputLatitude">Широта</label>
 							<div class="controls nobr">
@@ -90,9 +91,9 @@
 									</span>
 								</div>
 								<input type="text" id="inputLatitudeSec" class="input-mini" placeholder="51.0">
-								<div class="btn-group" data-toggle="buttons-radio">
-									<button type="button" class="btn active">С</button>
-									<button type="button" class="btn">Ю</button>
+								<div class="btn-group northSouth" data-toggle="buttons-radio">
+									<button type="button" class="btn north active">С</button>
+									<button type="button" class="btn south">Ю</button>
 								</div>
 							</div>
 						</div>
@@ -106,16 +107,146 @@
 									</span>
 								</div>
 								<input type="text" id="inputLongitudeSec" class="input-mini" placeholder="15.0">
-								<div class="btn-group" data-toggle="buttons-radio">
-								<button type="button" class="btn active">З</button>
-								<button type="button" class="btn">В</button>
+								<div class="btn-group westEast" data-toggle="buttons-radio">
+									<button type="button" class="btn west active">З</button>
+									<button type="button" class="btn east">В</button>
 								</div>
 							</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="cp">КП</label>
-							<div class="controls nobr">
-								<input type="text" id="cp" class="input-mini"  placeholder="270.0">
+							<div class="controls">
+								<input type="text" id="cp" class="input-mini" placeholder="270.0">
+							</div>
+						</div>
+					</div>
+					<div class="span9">
+						<div class="control-group">
+							<label class="control-label" for="starName">Название звезды</label>
+							<div class="controls">
+								<select  class="span6" type="text" id="starName" value = "first">
+									<optgroup label="Северное полушарие">
+										<option value = "first" class = "north">Альферац (альфа Андромеды)</option>
+										<option value = "a" class = "north">Полярная (альфа М.Медведицы)</option>
+										<option value = "b" class = "north">Алиот (эпсилон Б.Медведицы)</option>
+										<option value = "c" class = "north">Регул (альфа Льва)</option>
+										<option value = "d" class = "north">Денеб (альфа Лебедя)</option>
+										<option value = "e" class = "north">Фомальгаут (альфа Южн.Рыбы)</option>
+										<option value = "f" class = "north">Антарес (альфа Скорпиона)</option>
+										<option value = "g" class = "north">Поллукс (бета Близнецов)</option>
+										<option value = "h" class = "north">Спика (альфа Девы)</option>
+										<option value = "i" class = "north">Бетельгейзе (Ригель) (альфа Ориона)</option>
+										<option value = "j" class = "north">Альдебаран (альфа Тельца)</option>
+										<option value = "k" class = "north">Альтаир (альфа Орла)</option>
+										<option value = "l" class = "north">Процион (альфа М.Пса)</option>
+										<option value = "m" class = "north">Ригель (бета Ориона)</option>
+										<option value = "n" class = "north">Арктур (альфа Волопаса)</option>
+										<option value = "o" class = "north">Капелла (альфа Возничего)</option>
+										<option value = "p" class = "north">Вега (альфа Лиры)</option>
+										<option value = "q" class = "north">Сириус (альфа Б.Пса)</option>
+									</optgroup>
+									<optgroup label="Южное полушарие">
+										<option value = "second" class = "south">Канопус (альфа Арго)</option>
+										<option value = "s" class = "south">Ахернар (альфа Эридана)</option>
+										<option value = "t" class = "south">альфа Центавра</option>
+										<option value = "u" class = "south">бета Южн.Креста</option>
+										<option value = "v" class = "south">альфа Южн.Треугольника</option>
+										<option value = "w" class = "south">эпсилон Стрельца</option>
+										<option value = "x" class = "south">Пикок (альфа Павлина)</option>
+										<option value = "y" class = "south">Хамаль (альфа Овна) </option>
+									</optgroup>
+								</select>	
+							</div>
+						</div>
+					</div>
+					<div class="span4">
+						<div class="control-group">
+							<div class="controls">
+								<label class="radio"><input type="radio" name="starSelect" id="sun" value="sun">Солнце</label>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputSunLha">Местный часовой угол</label>
+							<div class="controls">
+								<div class="input">
+									<input type="text" id="inputSunLha" class="input-small">
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputSunRa">Прямое восхождение</label>
+							<div class="controls">
+								<div class="input">
+									<input type="text" id="inputSunRa" class="input-small">
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputSunGradient">Склонение</label>
+							<div class="controls">
+								<div class="input">
+									<input type="text" id="inputSunGradient" class="input-small">
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputSunAzimuth">Азимут</label>
+							<div class="controls">
+								<div class="input">
+									<input type="text" id="inputSunAzimuth" class="input-small">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="span5">
+						<div class="control-group">
+							<div class="controls">
+								<label class="radio"><input type="radio" name="starSelect" id="star" value="star" checked>Звезда
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="inputStarLha">Местный часовой угол</label>
+							<div class="controls">
+								<div class="input">
+									<input type="text" id="inputStarLha" class="input-small">
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputStarRa">Прямое восхождение</label>
+							<div class="controls">
+								<div class="input">
+									<input type="text" id="inputStarRa" class="input-small">
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputStarGradient">Склонение</label>
+							<div class="controls">
+								<div class="input">
+									<input type="text" id="inputStarGradient" class="input-small">
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputStarAzimuth">Азимут</label>
+							<div class="controls">
+								<div class="input">
+									<input type="text" id="inputStarAzimuth" class="input-small">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class = "clearfix"></div>
+					<hr class="bs-docs-separator">
+					<div class="span3 offset2">
+						<div class="control-group">
+							<label class="control-label" for="inputStarAzimuth">Поправка компаса</label>
+							<div class="controls">
+								<div class="input">
+									<input type="text" id="inputStarAzimuth" class="input-small">
+								</div>
 							</div>
 						</div>
 					</div>
@@ -132,6 +263,7 @@
 		<script type="text/javascript" src="/js/bootstrap-datepicker.js"> </script>
 		<script type="text/javascript" src="/js/bootstrap-datepicker.ru.js"> </script>
 		<script type="text/javascript" src="/js/bootstrap-timepicker.js"> </script>
+		<script type="text/javascript" src="/js/select2.min.js"> </script>
 		<script type="text/javascript" src="/js/main.js"> </script>
 	</body>
 </html>
