@@ -27,6 +27,10 @@ jQuery(document).ready(function($) {
 		showSeconds	: true
 	});
 
+	function calculate() {
+		fixInputs();
+	}
+
 	//change buttons state at the same time 
 	$('.westEast .btn.east').on('click', function(e) {
 		$('.westEast .btn.east').not($(this)).button('toggle');
@@ -36,26 +40,46 @@ jQuery(document).ready(function($) {
 	});
 
 	$('.northSouth button').on('click', function(e) {
-		var semisphere = $(this).hasClass('north') ? 'north' : 'south';
-		
-		if (!$('#starName option:selected').hasClass(semisphere)) {
-			$('#starName').select2('val', ($($('#starName option.' + semisphere)[0]).val()));
+		var semisphere = $(this).hasClass('north') ? 'north' : 'south',
+			constellation = $('#starName option:selected').closest('optgroup');
+		var visibleInSemisphere = constellation.hasClass(semisphere),
+			visibleInLatitude = (typeof constellation.attr(semisphere) !== 'undefined') ? 
+				(constellation.attr(semisphere) >= $('#inputLatitude').val()) : 
+				true;
+		if (!visibleInSemisphere || !visibleInLatitude) {
+			$('#starName').select2('val', ($($('#starName optgroup.' + semisphere + 'option')[0]).val()));
 		}
 	});
-	$("#starName").select2().on("change", function(e) {
-		if (!$('#starName option:selected').hasClass('north') && !$('.northSouth button.south').hasClass('active')) {
-			$('.northSouth button.south').button('toggle');
+	$("#starName").select2({
+		formatNoMatches : function(term) {
+			return 'Нет совпадений ' + term;
 		}
-		if (!$('#starName option:selected').hasClass('south') && !$('.northSouth button.north').hasClass('active')) {
-			$('.northSouth button.north').button('toggle');
+	}).on("change", function(e) {
+		var semisphere = $('.northSouth button.south').hasClass('active') ? 'south' : 'north',
+			constellation = $('#starName option:selected').closest('optgroup');
+		var visibleInSemisphere = constellation.hasClass(semisphere),
+			visibleInLatitude = (typeof constellation.attr(semisphere) !== 'undefined') ? 
+				(constellation.attr(semisphere) >= $('#inputLatitude').val()) : 
+				true;
+		if (!visibleInSemisphere || !visibleInLatitude) {
+			var latitude = typeof constellation.attr(semisphere) !== 'undefined' ? constellation.attr(semisphere) : 90;
+			$('#inputLatitude').val(latitude);
 		}
 	});
 
 	$('#inputLatitude').add('#inputLongitude').on('change', calculate);
-
-	function calculate() {
-		fixInputs();
-	}
+	//change star if it's not visible in this latitude
+	$('#inputLatitude').on('blur', function() {
+		var semisphere = $('.northSouth button.south').hasClass('active') ? 'south' : 'north',
+			inputLat = $(this).val();
+		var options = $('#starName option').filter(function(i){
+			var latitude = (typeof $(this).closest('optgroup').attr(semisphere) !== 'undefined') ? parseInt($(this).closest('optgroup').attr(semisphere)) : 90;
+			return latitude >= inputLat;
+		});
+		if (!options.filter(':selected').length) {
+			$('#starName').select2('val', $(options[0]).val());
+		}
+	});
 
 	function fixInputs() {
 		var lat = $('#inputLatitude').val() ? parseFloat($('#inputLatitude').val()) : null;
