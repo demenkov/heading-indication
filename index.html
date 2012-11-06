@@ -85,12 +85,12 @@
 							<label class="control-label" for="inputLatitude">Широта</label>
 							<div class="controls nobr">
 								<div class="input-append">
-									<input type="text" id="inputLatitude" class="input-mini" placeholder="55">
+									<input type="text" id="inputLatitude" class="input-mini" placeholder="55" value = "55">
 									<span class="add-on">
 										<i>&deg;</i>
 									</span>
 								</div>
-								<input type="text" id="inputLatitudeSec" class="input-mini" placeholder="51.0">
+								<input type="text" id="inputLatitudeSec" class="input-mini" placeholder="51.0" value = "51.0">
 								<div class="btn-group northSouth" data-toggle="buttons-radio">
 									<button type="button" class="btn north active">С</button>
 									<button type="button" class="btn south">Ю</button>
@@ -101,12 +101,12 @@
 							<label class="control-label" for="inputLongitude">Долгота</label>
 							<div class="controls nobr">
 								<div class="input-append">
-									<input type="text" id="inputLongitude" class="input-mini"  placeholder="14">
+									<input type="text" id="inputLongitude" class="input-mini"  placeholder="14" value = "14">
 									<span class="add-on">
 										<i>&deg;</i>
 									</span>
 								</div>
-								<input type="text" id="inputLongitudeSec" class="input-mini" placeholder="15.0">
+								<input type="text" id="inputLongitudeSec" class="input-mini" placeholder="15.0"  value = "15.0">
 								<div class="btn-group westEast" data-toggle="buttons-radio">
 									<button type="button" class="btn west active">З</button>
 									<button type="button" class="btn east">В</button>
@@ -125,35 +125,127 @@
 							<label class="control-label" for="starName">Название звезды</label>
 							<div class="controls">
 								<select  class="span6" type="text" id="starName" value = "first">
-									<optgroup label="Северное полушарие">
-										<option value = "first" class = "north">Альферац (альфа Андромеды)</option>
-										<option value = "a" class = "north">Полярная (альфа М.Медведицы)</option>
-										<option value = "b" class = "north">Алиот (эпсилон Б.Медведицы)</option>
-										<option value = "c" class = "north">Регул (альфа Льва)</option>
-										<option value = "d" class = "north">Денеб (альфа Лебедя)</option>
-										<option value = "e" class = "north">Фомальгаут (альфа Южн.Рыбы)</option>
-										<option value = "f" class = "north">Антарес (альфа Скорпиона)</option>
-										<option value = "g" class = "north">Поллукс (бета Близнецов)</option>
-										<option value = "h" class = "north">Спика (альфа Девы)</option>
-										<option value = "i" class = "north">Бетельгейзе (Ригель) (альфа Ориона)</option>
-										<option value = "j" class = "north">Альдебаран (альфа Тельца)</option>
-										<option value = "k" class = "north">Альтаир (альфа Орла)</option>
-										<option value = "l" class = "north">Процион (альфа М.Пса)</option>
-										<option value = "m" class = "north">Ригель (бета Ориона)</option>
-										<option value = "n" class = "north">Арктур (альфа Волопаса)</option>
-										<option value = "o" class = "north">Капелла (альфа Возничего)</option>
-										<option value = "p" class = "north">Вега (альфа Лиры)</option>
-										<option value = "q" class = "north">Сириус (альфа Б.Пса)</option>
+									<optgroup label="Андромеда" class = "north south" south = "37">
+										<option value = "1">Альферас</option>
+										<option value = "9">Мирах</option>
+										<option value = "15">Альмак</option>
 									</optgroup>
-									<optgroup label="Южное полушарие">
-										<option value = "second" class = "south">Канопус (альфа Арго)</option>
-										<option value = "s" class = "south">Ахернар (альфа Эридана)</option>
-										<option value = "t" class = "south">альфа Центавра</option>
-										<option value = "u" class = "south">бета Южн.Креста</option>
-										<option value = "v" class = "south">альфа Южн.Треугольника</option>
-										<option value = "w" class = "south">эпсилон Стрельца</option>
-										<option value = "x" class = "south">Пикок (альфа Павлина)</option>
-										<option value = "y" class = "south">Хамаль (альфа Овна) </option>
+									<optgroup label="Арго" class = "north south" north = "30">
+										<option value = "44">Канопус</option>
+										<option value = "63">Миаплацидус</option>
+										<option value = "60">Авиор</option>
+									</optgroup>
+									<optgroup label="Близнецы" class = "north south" south = "54">
+										<option value = "54">Кастор</option>
+										<option value = "56">Поллукс</option>
+									</optgroup>
+									<optgroup label="Большая медведица" class = "north south" south = "16">
+										<option value = "72">Дубхе</option>
+										<option value = "71">Мерак</option>
+										<option value = "75">Фекда</option>
+										<option value = "87">Алиот</option>
+										<option value = "91">Мицар</option>
+										<option value = "94">Бенетнаш</option>
+									</optgroup>
+									<optgroup label="Большой пёс" class = "north south" north = "57">
+										<option value = "46">Сириус</option>
+										<option value = "43">Мирзам</option>
+										<option value = "48">Адхара</option>
+									</optgroup>
+									<optgroup label="Возничий" class = "north south" south = "34">
+										<option value = "28">Капелла</option>
+										<option value = "41">Менкалинин</option>
+									</optgroup>
+									<optgroup label="Волопас" class = "north south" south = "34">
+										<option value = "99">Арктур</option>
+									</optgroup>
+									<optgroup label="Гидра" class = "north south" north = "55" south = "83">
+										<option value = "65">Альфард</option>
+									</optgroup>
+									<optgroup label="Дева" class = "north south" north = "68" south = "75">
+										<option value = "92">Спика</option>
+									</optgroup>
+									<optgroup label="Змееносец" class = "north south" north = "60" south = "75">
+										<option value = "130">Расальхагуэ</option>
+									</optgroup>
+									<optgroup label="Кассиопея" class = "north south" south = "13">
+										<option value = "6">Шедар</option>
+										<option value = "2">Кафф</option>
+									</optgroup>
+									<optgroup label="Кит" class = "north south" north = "65" south = "80">
+										<option value = "18">Менкар</option>
+										<option value = "7">Дифда</option>
+									</optgroup>
+									<optgroup label="Лебедь" class = "north south" south = "29">
+										<option value = "149">Денеб</option>
+									</optgroup>
+									<optgroup label="Лев" class = "north south" north = "84" south = "56">
+										<option value = "67">Регул</option>
+										<option value = "74">Денебола</option>
+										<option value = "68">Альгейба</option>
+									</optgroup>
+									<optgroup label="Лира" class = "north south" north = "84" south = "56">
+										<option value = "139">Вега</option>
+									</optgroup>
+									<optgroup label="Малая медведица" class = "north south" south = "0">
+										<option value = "106">Кохаб</option>
+									</optgroup>
+									<optgroup label="Малый пёс" class = "north south" south = "76">
+										<option value = "55">Процион</option>
+									</optgroup>
+									<optgroup label="Овен" class = "north south" south = "59">
+										<option value = "16">Хамаль</option>
+										<option value = "13">Шератан</option>
+									</optgroup>
+									<optgroup label="Орёл" class = "north south" north = "78" south = "71">
+										<option value = "146">Альтаир</option>
+									</optgroup>
+									<optgroup label="Орион" class = "north south" north = "79" south = "67">
+										<option value = "40">Бетельгейзе</option>
+										<option value = "27">Ригель</option>
+										<option value = "29">Белятрикс</option>
+										<option value = "32">Минтака</option>
+									</optgroup>
+									<optgroup label="Пегас" class = "north south" south = "54">
+										<option value = "159">Маркаб</option>
+										<option value = "158">Сеат</option>
+										<option value = "3">Альгейниб</option>
+									</optgroup>
+									<optgroup label="Персей" class = "north south" south = "31">
+										<option value = "20">Мирфак</option>
+										<option value = "19">Альголь</option>
+									</optgroup>
+									<optgroup label="Северная корона" class = "north south" south = "50">
+										<option value = "111">Альфакка</option>
+									</optgroup>
+									<optgroup label="Скорпион" class = "north south" north = "45">
+										<option value = "117">Антарес</option>
+										<option value = "129">Жаула</option>
+									</optgroup>
+									<optgroup label="Телец" class = "north south" north = "89" south = "59">
+										<option value = "24">Альдебаран</option>
+										<option value = "30">Нат</option>
+										<option value = "21">Альциона</option>
+									</optgroup>
+									<optgroup label="Центавр" class = "north south" north = "26">
+										<option value = "102">Ригил-Кентавр</option>
+									</optgroup>
+									<optgroup label="Цефей" class = "north south" south = "2">
+										<option value = "151">Альдерамин</option>
+									</optgroup>
+									<optgroup label="Эридан" class = "north south" north = "32">
+										<option value = "11">Ахернар</option>
+									</optgroup>
+									<optgroup label="Южная рыба" class = "north south" north = "53">
+										<option value = "157">Фомальхаут</option>
+									</optgroup>
+									<optgroup label="Южный крест" class = "north south" north = "26">
+										<option value = "80">Акрус</option>
+										<option value = "86">Мимоза</option>
+										<option value = "81">Гаркус</option>
+									</optgroup>
+									<optgroup label="Южный треугольник" class = "north south" north = "30">
+										<option value = "122">Атриа</option>
 									</optgroup>
 								</select>	
 							</div>
