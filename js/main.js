@@ -1,6 +1,11 @@
 //main function
 jQuery(document).ready(function($) {
 	"use strict";
+	//extend standart math functions wuth new one - convert degrees into radians
+	Math.rad = function(number) {
+		return number * Math.PI / 180;
+	}
+
 	//add date interactivity
 	$('#inputDate').datepicker({
 		format		: 'dd.mm.yyyy',
@@ -28,8 +33,6 @@ jQuery(document).ready(function($) {
 	});
 
 	//add some validators
-
-
 	$('#inputLatitude').on('blur', function() {
 		var val = $(this).val() ? parseFloat($(this).val()) : null;
 		if (val > 90) {
@@ -89,9 +92,13 @@ jQuery(document).ready(function($) {
 			date.day + 
 			UT/24,
 			tau = date.day/36525,
-			M0 = 357.52910 +35999.05030*tau -0.0001559*tau*2 -0.00000048*tau*3;
-		console.log(JD, tau, M0);
+			//M01 = 357.528 + 35999.05 * tau + 0.04107 * UT,//средняя аномалия солнца
+			M0 = 357.52910 + 35999.05030 * tau - 0.0001559 * 2 * tau - 0.00000048 * 3 * tau, //средняя аномалия солнца
+			L0 = 280.46 + 36000.772 * tau + 0.04107 * UT; //средняя долгота солнца
 
+		M0 = (M0 > 360) ? 360 : M0;
+		var L = L0 + (1.915 - 0.0048 * tau) * Math.sin(Math.rad(M0)) + 0.02 * Math.sin(Math.rad(2 * M0));//долгота Солнца
+		L = (L > 360) ? L-360 : L;
 	}
 
 	//change buttons state at the same time 
