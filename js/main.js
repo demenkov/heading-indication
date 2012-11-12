@@ -117,17 +117,6 @@ jQuery(document).ready(function($) {
 		}
 	}).on("change", fixStars);
 
-	$('#starNum').on('keyup', function(e) {
-		if (!$('#starName option[value="' + $(this).val() + '"]').length) {
-			$(this).closest('div.control-group').addClass('error');
-		}
-		else {
-			$(this).closest('div.control-group').removeClass('error');
-			$('#starName').select2('val', $(this).val());
-			fixStars(e);
-		}
-	});
-
 	//change star if it's not visible in this latitude
 	$('#inputLatitude').on('blur', fixStars);
 
@@ -136,7 +125,6 @@ jQuery(document).ready(function($) {
 		if (!$(stars).filter(':selected').length) {
 			$('#starName').select2('val', $(stars[0]).val());
 		}
-		$('#starNum').val($('#starName').val());
 	}
 
 	function getAvailableStars(el) {
