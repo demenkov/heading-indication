@@ -141,6 +141,7 @@ jQuery(document).ready(function($) {
 			cp = parseFloat($('#cp').val()),
 			star = $('input[name="starSelect"]').attr('checked') ? true : false,
 			west = $('#westEast').val() == 'west' ? true : false,
+			north = $('.btn.north').hasClass('active') ?  'north' : 'south',
 			date = {
 				day			: parseInt(d[0]),
 				month		: parseInt(d[1]),
@@ -197,7 +198,7 @@ jQuery(document).ready(function($) {
 		var sunLha = (west) ? fullLongitude + UT : fullLongitude - UT;
 
 		var azimuth = (Math.atan(Math.cos(Math.rad(fullLatitude)) * Math.tan(Math.rad(betaSun)) * Math.cosec(Math.rad(sunLha)) - Math.sin(Math.rad(fullLatitude)) * Math.cot(Math.rad(sunLha))))/60;
-
+		
 		var deltaKSun = cp - azimuth;
 
 		if (sunLha) {
