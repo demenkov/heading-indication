@@ -142,6 +142,7 @@ jQuery(document).ready(function($) {
 			star = $('input[name="starSelect"]').attr('checked') ? true : false,
 			west = $('#westEast').val() == 'west' ? true : false,
 			north = $('.btn.north').hasClass('active') ?  'north' : 'south',
+			zone = parseInt($('#timeZone').val()),
 			date = {
 				day			: parseInt(d[0]),
 				month		: parseInt(d[1]),
@@ -191,21 +192,26 @@ jQuery(document).ready(function($) {
 		var alphaStrokeSun = Math.acos(Math.cos(lambdaSun) / Math.cos(betaSun)); //(12.4)
 		var alphaSun = (betaSun > 0) ? alphaStrokeSun : 360 - alphaStrokeSun;
 
+		
 		var fullLongitude = longitude + longitudeSec / 60;
-		
 		var fullLatitude = latitude + latitudeSec / 60;
-		
-		var sunLha = (west) ? fullLongitude + UT : fullLongitude - UT;
 
+		var sunLha = (west) ? UT - fullLongitude  : UT + fullLongitude;
+
+		/*var time = UT - zone;
+		console.log(timegr);
 		var azimuth = (Math.atan(Math.cos(Math.rad(fullLatitude)) * Math.tan(Math.rad(betaSun)) * Math.cosec(Math.rad(sunLha)) - Math.sin(Math.rad(fullLatitude)) * Math.cot(Math.rad(sunLha))))/60;
-		
-		var deltaKSun = cp - azimuth;
+		var deltaKSun = cp - azimuth;*/
+
+
+
+
 
 		if (sunLha) {
 			$('#inputSunLha').val(sunLha.toFixed(2));
 		}
 		
-		if (betaSun) {
+		/*if (betaSun) {
 			$('#inputSunGradient').val(betaSun.toFixed(2));
 		}
 
@@ -219,7 +225,7 @@ jQuery(document).ready(function($) {
 
 		if (deltaKSun && star) {
 			$('#inputSunAzimuth').val(deltaKSun.toFixed(2));
-		}
+		}*/
 	}
 
 	//change buttons state at the same time 
