@@ -266,7 +266,7 @@
 					<div class="span4">
 						<div class="control-group">
 							<div class="controls">
-								<label class="radio"><input type="radio" name="starSelect" id="sun" value="sun">Солнце</label>
+								<label class="radio"><input type="radio" name="starSelect" id="sun" value="sun" checked="checked">Солнце</label>
 							</div>
 						</div>
 						<div class="control-group">
@@ -305,7 +305,7 @@
 					<div class="span5">
 						<div class="control-group">
 							<div class="controls">
-								<label class="radio"><input type="radio" name="starSelect" id="star" value="star" checked>Звезда
+								<label class="radio"><input type="radio" name="starSelect" id="star" value="star">Звезда
 							</div>
 						</div>
 
@@ -346,14 +346,15 @@
 					<hr class="bs-docs-separator">
 					<div class="span3 offset2">
 						<div class="control-group">
-							<label class="control-label" for="inputStarAzimuth">Поправка компаса</label>
+							<label class="control-label" for="inputCompass">Поправка компаса</label>
 							<div class="controls">
 								<div class="input">
-									<input type="text" id="inputStarAzimuth" class="input-small">
+									<input type="text" id="inputCompass" class="input-small">
 								</div>
 							</div>
 						</div>
 					</div>
+					<input type="hidden" id="westEast" value = "west">
 				</div>
 			</form>
 		</div><!-- /programm form -->
