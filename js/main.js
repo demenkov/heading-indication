@@ -142,47 +142,47 @@ jQuery(document).ready(function($) {
 			star = $('input[name="starSelect"]').attr('checked') ? true : false,
 			west = $('#westEast').val() == 'west' ? true : false,
 			north = $('.btn.north').hasClass('active') ?  'north' : 'south',
-			zone = parseInt($('#timeZone').val()),
-			date = {
-				day			: parseInt(d[0]),
-				month		: parseInt(d[1]),
-				year		: parseInt(d[2]),
-				monthStroke	: (parseInt(d[1]) > 2) ? parseInt(d[1]) + 12 : parseInt(d[1]),
-				yearStroke	: parseInt(d[2]) - 1
-			}, 
-			time = {
-				hours	: parseInt(t[0]),
-				minutes	: parseInt(t[1]),
-				seconds	: parseInt(t[2])
-			},
-			UT = time.hours + time.minutes/60 + time.seconds/3600,//(12.3)
-			JD = 1720996.5 - 
+			zone = parseInt($('#timeZone').val());
+		var date = {
+			day			: parseInt(d[0]),
+			month		: parseInt(d[1]),
+			year		: parseInt(d[2]),
+			monthStroke	: (parseInt(d[1]) > 2) ? parseInt(d[1]) + 12 : parseInt(d[1]),
+			yearStroke	: parseInt(d[2]) - 1
+		}; 
+		var time = {
+			hours	: parseInt(t[0]),
+			minutes	: parseInt(t[1]),
+			seconds	: parseInt(t[2])
+		};
+		var UT = time.hours + time.minutes/60 + time.seconds/3600;//(12.3)
+		var JD = 1720996.5 - 
 			Math.round(date.yearStroke/100) + 
 			Math.round(date.yearStroke/400) + 
 			Math.round(365.25 * date.yearStroke) + 
 			Math.round(30.6 * (date.monthStroke + 1)) + 
 			date.day + 
-			UT/24,//(2.20)
-			tau			= date.day/36525, //(12.2)
-			M0Sun		= 359.9286,
-			K0			= 1.9154,
-			E0			= 23.4412,
-			Omega0Moon	= 55.199,
-			L0			= 279.6034,
-			S0			= 99.6056;
+			UT/24;//(2.20)
+		var tau			= date.day/36525; //(12.2)
+		var M0Sun		= 359.9286;
+		var K0			= 1.9154;
+		var E0			= 23.4412;
+		var Omega0Moon	= 55.199;
+		var L0			= 279.6034;
+		var S0			= 99.6056;
 
-		var RSun			= 0.26696 + 0.00447 * Math.cos(M0Sun), //(12.9)
-			deltaMStroke	= 0.985647 * UT / 24, //(12.18)
-			deltaM			= 35999.05 * tau, //(12.17)
-			OmegaMoon		= Omega0Moon - 1934.14 * tau; // (12.8)
+		var RSun			= 0.26696 + 0.00447 * Math.cos(M0Sun); //(12.9)
+		var deltaMStroke	= 0.985647 * UT / 24; //(12.18)
+		var deltaM			= 35999.05 * tau; //(12.17)
+		var OmegaMoon		= Omega0Moon - 1934.14 * tau; // (12.8)
 
-		var MSun 	= M0Sun + deltaM + deltaMStroke, //(12.16)
-			K		= K0 - 0.004881 * tau; //(12.15)
+		var MSun 	= M0Sun + deltaM + deltaMStroke; //(12.16)
+		var K		= K0 - 0.004881 * tau; //(12.15)
 
-		var nu				= K * Math.sin(MSun) + 0.02 * Math.sin(2 * MSun), //(12.14)
-			deltaPsi		= -0.00479 * Math.sin(OmegaMoon), //(12.9)
-			deltaL			= 36000 * tau + 0.768925 * tau, //(12.2)
-			deltaLstroke	= 0.985647 * UT / 24; //(12.13)
+		var nu				= K * Math.sin(MSun) + 0.02 * Math.sin(2 * MSun); //(12.14)
+		var deltaPsi		= -0.00479 * Math.sin(OmegaMoon); //(12.9)
+		var deltaL			= 36000 * tau + 0.768925 * tau; //(12.2)
+		var deltaLstroke	= 0.985647 * UT / 24; //(12.13)
 
 		var L = L0 + deltaL + deltaLstroke; //(12.11)
 		var lambdaSun = L + nu + deltaPsi; //(12.9)
