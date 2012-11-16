@@ -6,6 +6,10 @@ jQuery(document).ready(function($) {
 		return number * Math.PI / 180;
 	}
 
+	Math.deg = function(number) {
+		return number * 180 / Math.PI;
+	}
+
 	Math.cosec = function(number) {
 		return 1/Math.sin(number);
 	}
@@ -184,7 +188,7 @@ jQuery(document).ready(function($) {
 		
 		var sunLha = (west) ? fullLongitude + UT : fullLongitude - UT;
 
-		var azimuth = Math.atan(Math.cos(fullLatitude) * Math.tan(betaSun) * Math.cosec(sunLha) - Math.sin(fullLatitude) * Math.cot(sunLha))
+		var azimuth = (Math.atan(Math.cos(Math.rad(fullLatitude)) * Math.tan(betaSun) * Math.cosec(Math.rad(sunLha)) - Math.sin(Math.rad(fullLatitude)) * Math.cot(Math.rad(sunLha))))/60;
 
 		var deltaKSun = azimuth - cp;
 
