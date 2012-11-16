@@ -103,7 +103,7 @@ jQuery(document).ready(function($) {
 	.add('#cp')
 	.on('keyup', calculate);
 
-	$('.btn').on('click', calculate);
+	$('input[name="starSelect"]').add('input[name="sunSelect"]').on('click', calculate);
 
 	$('#inputTime').on('change', calculate);
 
@@ -113,6 +113,11 @@ jQuery(document).ready(function($) {
 		.add('#inputSunRa')
 		.add('#inputSunGradient')
 		.add('#inputSunLha')
+		.add('#inputStarLha')
+		.add('#inputStarRa')
+		.add('#inputStarGradient')
+		.add('#inputStarAzimuth')
+		.add('#inputCompass')
 		.val('');
 		//soon
 		var d = $('#inputDate').val().split('.'),
@@ -121,7 +126,9 @@ jQuery(document).ready(function($) {
 			latitudeSec = parseFloat($('#inputLatitudeSec').val()),
 			longitude = parseInt($('#inputLongitude').val()),
 			longitudeSec = parseFloat($('#inputLongitudeSec').val()),
-			west = $('.eathWest button.west').hasClass('active') ? true : false,
+			cp = parseFloat($('#cp').val()),
+			star = $('input[name="starSelect"]').attr('checked') ? true : false,
+			west = $('#westEast').val() == 'west' ? true : false,
 			date = {
 				day			: parseInt(d[0]),
 				month		: parseInt(d[1]),
@@ -171,42 +178,47 @@ jQuery(document).ready(function($) {
 		var alphaStrokeSun = Math.acos(Math.cos(lambdaSun) / Math.cos(betaSun)); //(12.4)
 		var alphaSun = (betaSun > 0) ? alphaStrokeSun : 360 - alphaStrokeSun;
 
-		//stars
-		//var deltaAlphaPr = (1.2808 + 0.5566 * Math.tan(склонение) * Math.sin(прямое_восхождение)) * tau // (12.22)
-
 		var fullLongitude = longitude + longitudeSec / 60;
-		fullLongitude = west ? (-1 * fullLongitude) : fullLongitude;
-		var sunLha = UT + fullLongitude;
+		
+		var fullLatitude = latitude + latitudeSec / 60;
+		
+		var sunLha = (west) ? fullLongitude + UT : fullLongitude - UT;
 
+		var azimuth = Math.atan(Math.cos(fullLatitude) * Math.tan(betaSun) - Math.cosec(sunLha) - Math.sin(fullLatitude) * Math.cot(sunLha))
 
-		var azimuth = Math.atan(Math.cos(latitude) * Math.tan(betaSun) - Math.cosec(sunLha) - Math.sin(latitude) * Math.cot(sunLha)) //arctg (cos tgcosect - sinctgt)
+		var deltaKSun = azimuth - cp;
 
 		if (sunLha) {
-			$('#inputSunLha').val(sunLha);
+			$('#inputSunLha').val(sunLha.toFixed(2));
 		}
 		
 		if (betaSun) {
-			$('#inputSunGradient').val(betaSun);
+			$('#inputSunGradient').val(betaSun.toFixed(2));
 		}
 
 		if (alphaSun) {
-			$('#inputSunRa').val(alphaSun);
+			$('#inputSunRa').val(alphaSun.toFixed(2));
 		}
 
 		if (azimuth) {
-			$('#inputSunAzimuth').val(azimuth);
+			$('#inputSunAzimuth').val(azimuth.toFixed(2));
 		}
 
-
-			/**/
+		if (deltaKSun && star) {
+			$('#inputCompass').val(deltaKSun.toFixed(2));
+		}
 	}
 
 	//change buttons state at the same time 
 	$('.westEast .btn.east').on('click', function(e) {
+		$('#westEast').val('east');
 		$('.westEast .btn.east').not($(this)).button('toggle');
+		calculate();
 	});
 	$('.westEast .btn.west').on('click', function(e) {
+		$('#westEast').val('west');
 		$('.westEast .btn.west').not($(this)).button('toggle');
+		calculate();
 	});
 
 	$('.northSouth button').on('click', fixStars);
@@ -242,6 +254,5 @@ jQuery(document).ready(function($) {
 		return options;
 	}
 
-	//$('#inputLatitude').add('#inputLongitude').on('change', calculate);
 	calculate();
 });
