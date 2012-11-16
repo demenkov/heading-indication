@@ -188,7 +188,7 @@ jQuery(document).ready(function($) {
 		
 		var sunLha = (west) ? fullLongitude + UT : fullLongitude - UT;
 
-		var azimuth = (Math.atan(Math.cos(Math.rad(fullLatitude)) * Math.tan(betaSun) * Math.cosec(Math.rad(sunLha)) - Math.sin(Math.rad(fullLatitude)) * Math.cot(Math.rad(sunLha))))/60;
+		var azimuth = (Math.atan(Math.cos(Math.rad(fullLatitude)) * Math.tan(Math.rad(betaSun)) * Math.cosec(Math.rad(sunLha)) - Math.sin(Math.rad(fullLatitude)) * Math.cot(Math.rad(sunLha))))/60;
 
 		var deltaKSun = azimuth - cp;
 
