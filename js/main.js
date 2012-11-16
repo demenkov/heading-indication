@@ -205,11 +205,11 @@ jQuery(document).ready(function($) {
 		}
 
 		if (azimuth) {
-			$('#inputSunAzimuth').val(azimuth.toFixed(2));
+			$('#inputCompass').val(azimuth.toFixed(2));
 		}
 
 		if (deltaKSun && star) {
-			$('#inputCompass').val(deltaKSun.toFixed(2));
+			$('#inputSunAzimuth').val(deltaKSun.toFixed(2));
 		}
 	}
 
