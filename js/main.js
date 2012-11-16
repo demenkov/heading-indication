@@ -184,24 +184,24 @@ jQuery(document).ready(function($) {
 		var deltaL			= 36000 * tau + 0.768925 * tau; //(12.2)
 		var deltaLstroke	= 0.985647 * UT / 24; //(12.13)
 
-		var L = L0 + deltaL + deltaLstroke; //(12.11)
-		var lambdaSun = L + nu + deltaPsi; //(12.9)
-		var deltaE = 0.002666 * Math.cos(OmegaMoon); //(12.7)
-		var E = E0 - 0.013012 * tau + deltaE; //(12.6)
-		var betaSun = Math.asin(Math.sin(lambdaSun) * Math.sin(E)); // (12.5)
-		var alphaStrokeSun = Math.acos(Math.cos(lambdaSun) / Math.cos(betaSun)); //(12.4)
-		var alphaSun = (betaSun > 0) ? alphaStrokeSun : 360 - alphaStrokeSun;
+		var L				= L0 + deltaL + deltaLstroke; //(12.11)
+		var lambdaSun		= L + nu + deltaPsi; //(12.9)
+		var deltaE			= 0.002666 * Math.cos(OmegaMoon); //(12.7)
+		var E				= E0 - 0.013012 * tau + deltaE; //(12.6)
+		var betaSun			= Math.asin(Math.sin(lambdaSun) * Math.sin(E)); // (12.5)
+		var alphaStrokeSun	= Math.acos(Math.cos(lambdaSun) / Math.cos(betaSun)); //(12.4)
+		var alphaSun		= (betaSun > 0) ? alphaStrokeSun : 360 - alphaStrokeSun;
 
 		
-		var fullLongitude = longitude + longitudeSec / 60;
-		var fullLatitude = latitude + latitudeSec / 60;
+		var fullLongitude	= longitude + longitudeSec / 60;
+		var fullLatitude	= latitude + latitudeSec / 60;
 
 		var sunLha = (west) ? UT - fullLongitude  : UT + fullLongitude;
 
-		/*var time = UT - zone;
-		console.log(timegr);
+		/*var time = UT - zone;*/
+		//console.log(timegr);
 		var azimuth = (Math.atan(Math.cos(Math.rad(fullLatitude)) * Math.tan(Math.rad(betaSun)) * Math.cosec(Math.rad(sunLha)) - Math.sin(Math.rad(fullLatitude)) * Math.cot(Math.rad(sunLha))))/60;
-		var deltaKSun = cp - azimuth;*/
+		var deltaKSun = cp - azimuth;
 
 
 
@@ -211,7 +211,7 @@ jQuery(document).ready(function($) {
 			$('#inputSunLha').val(sunLha.toFixed(2));
 		}
 		
-		/*if (betaSun) {
+		if (betaSun) {
 			$('#inputSunGradient').val(betaSun.toFixed(2));
 		}
 
@@ -225,7 +225,7 @@ jQuery(document).ready(function($) {
 
 		if (deltaKSun && star) {
 			$('#inputSunAzimuth').val(deltaKSun.toFixed(2));
-		}*/
+		}
 	}
 
 	//change buttons state at the same time 
