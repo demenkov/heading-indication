@@ -102,9 +102,17 @@ jQuery(document).ready(function($) {
 		calculate();
 	});
 
+	$('#cp').on('blur keyup', function() {
+		var val = $(this).val() ? parseFloat($(this).val()) : null;
+		if (val < 0 || isNaN(val)) {
+			val *= -1;
+		}
+		$(this).val(val);
+		calculate();
+	});
+
 	$('#timeZone')
 	.add('#inputTime')
-	.add('#cp')
 	.on('keyup', calculate);
 
 	$('input[name="starSelect"]').add('input[name="sunSelect"]').on('click', calculate);
@@ -190,7 +198,7 @@ jQuery(document).ready(function($) {
 
 		var azimuth = (Math.atan(Math.cos(Math.rad(fullLatitude)) * Math.tan(Math.rad(betaSun)) * Math.cosec(Math.rad(sunLha)) - Math.sin(Math.rad(fullLatitude)) * Math.cot(Math.rad(sunLha))))/60;
 
-		var deltaKSun = azimuth - cp;
+		var deltaKSun = cp - azimuth;
 
 		if (sunLha) {
 			$('#inputSunLha').val(sunLha.toFixed(2));
