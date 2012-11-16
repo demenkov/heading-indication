@@ -6,6 +6,14 @@ jQuery(document).ready(function($) {
 		return number * Math.PI / 180;
 	}
 
+	Math.cosec = function(number) {
+		return 1/Math.sin(number);
+	}
+
+	Math.cot = function(number) {
+		return 1/Math.tan(number);
+	}
+
 	//enable content tabs
 	$('#mainMenu a').click(function (e) {
 		e.preventDefault();
@@ -42,7 +50,7 @@ jQuery(document).ready(function($) {
 	});
 
 	//add some validators
-	$('#inputLatitude').on('blur', function() {
+	$('#inputLatitude').on('blur keyup', function() {
 		var val = $(this).val() ? parseFloat($(this).val()) : null;
 		if (val > 90) {
 			val = 90;
@@ -51,9 +59,10 @@ jQuery(document).ready(function($) {
 			val = 0;
 		}
 		$(this).val(val);
+		calculate();
 	});
 
-	$('#inputLongitude').on('blur', function() {
+	$('#inputLongitude').on('blur keyup', function() {
 		var val = $(this).val() ? parseFloat($(this).val()) : null;
 		if (val > 180) {
 			val = 180;
@@ -62,9 +71,22 @@ jQuery(document).ready(function($) {
 			val = 0;
 		}
 		$(this).val(val);
+		calculate();
 	});
 
-	$('#timeZone').on('blur', function() {
+	$('#inputLongitudeSec').add('#inputLatitudeSec').on('blur keyup', function() {
+		var val = $(this).val() ? parseFloat($(this).val()) : null;
+		if (val > 60) {
+			val = 60;
+		}
+		if (val < 0 || isNaN(val)) {
+			val = 0;
+		}
+		$(this).val(val);
+		calculate();
+	});
+
+	$('#timeZone').on('blur keyup', function() {
 		var val = $(this).val() ? parseFloat($(this).val()) : null;
 		if (val > 12) {
 			val = 12;
@@ -73,14 +95,11 @@ jQuery(document).ready(function($) {
 			val = 0;
 		}
 		$(this).val(val);
+		calculate();
 	});
 
 	$('#timeZone')
 	.add('#inputTime')
-	.add('#inputLatitude')
-	.add('#inputLatitudeSec')
-	.add('#inputLongitude')
-	.add('#inputLongitudeSec')
 	.add('#cp')
 	.on('keyup', calculate);
 
@@ -95,11 +114,13 @@ jQuery(document).ready(function($) {
 		.add('#inputSunGradient')
 		.add('#inputSunLha')
 		.val('');
-
+		//soon
 		var d = $('#inputDate').val().split('.'),
 			t = $('#inputTime').val().split(':'),
-			longitude = $('#inputLongitude').val(),
-			longitudeSec = $('#inputLatitudeSec').val(),
+			latitude = parseInt($('#inputLatitude').val()),
+			latitudeSec = parseFloat($('#inputLatitudeSec').val()),
+			longitude = parseInt($('#inputLongitude').val()),
+			longitudeSec = parseFloat($('#inputLongitudeSec').val()),
 			west = $('.eathWest button.west').hasClass('active') ? true : false,
 			date = {
 				day			: parseInt(d[0]),
@@ -126,7 +147,8 @@ jQuery(document).ready(function($) {
 			K0			= 1.9154,
 			E0			= 23.4412,
 			Omega0Moon	= 55.199,
-			L0			= 279.6034;
+			L0			= 279.6034,
+			S0			= 99.6056;
 
 		var RSun			= 0.26696 + 0.00447 * Math.cos(M0Sun), //(12.9)
 			deltaMStroke	= 0.985647 * UT / 24, //(12.18)
@@ -142,17 +164,25 @@ jQuery(document).ready(function($) {
 			deltaLstroke	= 0.985647 * UT / 24; //(12.13)
 
 		var L = L0 + deltaL + deltaLstroke; //(12.11)
-		var lambdaSun = L + nu + deltaPsi, //(12.9)
-			deltaE = 0.002666 * Math.cos(OmegaMoon); //(12.7)
+		var lambdaSun = L + nu + deltaPsi; //(12.9)
+		var deltaE = 0.002666 * Math.cos(OmegaMoon); //(12.7)
 		var E = E0 - 0.013012 * tau + deltaE; //(12.6)
 		var betaSun = Math.asin(Math.sin(lambdaSun) * Math.sin(E)); // (12.5)
 		var alphaStrokeSun = Math.acos(Math.cos(lambdaSun) / Math.cos(betaSun)); //(12.4)
 		var alphaSun = (betaSun > 0) ? alphaStrokeSun : 360 - alphaStrokeSun;
 
-		var fullLongitude = longitude + longitudeSec / 60;
+		//stars
+		//var deltaAlphaPr = (1.2808 + 0.5566 * Math.tan(склонение) * Math.sin(прямое_восхождение)) * tau // (12.22)
 
-		if (fullLongitude) {
-			$('#inputSunLha').val(fullLongitude);
+		var fullLongitude = longitude + longitudeSec / 60;
+		fullLongitude = west ? (-1 * fullLongitude) : fullLongitude;
+		var sunLha = UT + fullLongitude;
+
+
+		var azimuth = Math.atan(Math.cos(latitude) * Math.tan(betaSun) - Math.cosec(sunLha) - Math.sin(latitude) * Math.cot(sunLha)) //arctg (cos tgcosect - sinctgt)
+
+		if (sunLha) {
+			$('#inputSunLha').val(sunLha);
 		}
 		
 		if (betaSun) {
@@ -163,11 +193,12 @@ jQuery(document).ready(function($) {
 			$('#inputSunRa').val(alphaSun);
 		}
 
+		if (azimuth) {
+			$('#inputSunAzimuth').val(azimuth);
+		}
 
-			/*23.4412
-			55.199
-			279.6034
-			99.6056*/
+
+			/**/
 	}
 
 	//change buttons state at the same time 
