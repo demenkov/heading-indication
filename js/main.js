@@ -23,8 +23,8 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		$(this).tab('show');
 	});
-	//$('#mainMenu a:first').tab('show');
-	$('#description').show();
+	$('#mainMenu a:first').tab('show');
+	//$('#description').show();
 
 	//add date interactivity
 	$('#inputDate').datepicker({
