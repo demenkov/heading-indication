@@ -51,7 +51,7 @@
 				</div>
 			</div>
 		</header>
-		
+
 		<div id = "programm" class = "tab-pane container programm"><!-- programm form -->
 			<div class="page-header">
 				<h1>Определение поправки курсоуказания</h1>
@@ -259,7 +259,7 @@
 									<optgroup label="Южный треугольник" class = "north south" north = "30">
 										<option value = "122">122 Атриа</option>
 									</optgroup>
-								</select>	
+								</select>
 							</div>
 						</div>
 					</div>
@@ -363,7 +363,7 @@
 				<h1>Основные понятия</h1>
 			</div>
 			<div class = "row">
-				<div class = "span8">
+				<div class = "span7">
 					<p>В&nbsp;навигации главная задача&nbsp;&mdash; определение места судна&nbsp;&mdash; решается по&nbsp;наблюдениям видимых ориентиров, расположенных на&nbsp;поверхности Земли. Наблюдатель и&nbsp;ориентиры с&nbsp;известными координатами находятся на&nbsp;одной поверхности, и&nbsp;определение места заключается в&nbsp;определении положения наблюдателя относительно ориентиров по&nbsp;измеренным навигационным параметрам: пеленгам, дистанциям, горизонтальным углам, разности расстояний и&nbsp;так далее</p>
 					<p>В&nbsp;мореходной астрономии для наблюдения используются естественные небесные ориентиры&nbsp;&mdash; Солнце, Луна, планеты, навигационные звёзды и&nbsp;искусственные ориентиры&nbsp;&mdash; навигационные искусственные спутники Земли (НИСЗ). Эти небесные ориентиры удалены от&nbsp;наблюдателя на&nbsp;различные расстояния: наиболее близкие&nbsp;&mdash; НИСЗ, Луна, Солнце, планеты; наиболее удалённые&nbsp;&mdash; звёзды. Так, звезда Сириус удалена от&nbsp;Земли на&nbsp;8,65 светового года, то&nbsp;есть свет от&nbsp;этой звезды доходит до&nbsp;Земли почти за&nbsp;девять лет. Расстояние до&nbsp;других звёзд в&nbsp;сотни и&nbsp;тысячи раз больше.</p>
 					<p>Для решения астрономических, связанных с&nbsp;определением места судна и&nbsp;поправок курсоуказателей, необходимо знать не&nbsp;расстояния, а&nbsp;направления на&nbsp;светила, задаваемые при помощи той или иной системы координат. Это обстоятельство позволяет считать, что все светила находятся на&nbsp;одинаковом расстоянии от&nbsp;наблюдателя, то&nbsp;есть расположены на&nbsp;окружающей его сферической поверхности.</p>
@@ -375,9 +375,10 @@
 					<p>Плоскость на&nbsp;небесной сфере, проходящая через полюса мира и&nbsp;точку зенит, называется <em>плоскостью меридиана наблюдателя,</em> или местным небесным меридианом. Плоскость, проходящую через полюса мира и&nbsp;местоположение светила С, называют <em>плоскостью меридиана светила.</em> Ось мира делит плоскость меридиана наблюдателя на&nbsp;полуденную часть&nbsp;&mdash; PZQS P' c&nbsp;точкой зенита и&nbsp;полуночную PQ&nbsp;'n P' с&nbsp;точкой надира на&nbsp;ней.</p>
 					<p>След от&nbsp;пересечения плоскостей меридиана наблюдателя и&nbsp;истинного горизонта называется <em>полуденной линией.</em> По&nbsp;этой линии в&nbsp;полдень, направлена солнечная тень от&nbsp;вертикального предмета на&nbsp;Земле. Полуденная линия делит плоскость истинного горизонта на&nbsp;восточную Е&nbsp;и&nbsp;западную W&nbsp;части.</p>
 				</div>
-				<ul class = "span4" data-spy="affix" data-offset-top="400">
-					<p>ff</p>
-				</ul>
+				<div class = "span4">
+					<div id = "sphere" data-spy="affix" data-offset-top="200">
+					</div>
+				</div>
 			</div>
 		</div><!-- /programm description -->
 		<div id = "about" class = "tab-pane container about"><!-- programm about -->
@@ -386,6 +387,8 @@
 			</div>
 			<p></p>
 		</div><!-- /programm about -->
+
+		<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
 
 		<!--[if lt IE 9]>
 		<script src="///js/html5.js"></script>
@@ -397,6 +400,8 @@
 		<script type="text/javascript" src="js/bootstrap-datepicker.ru.js"> </script>
 		<script type="text/javascript" src="js/bootstrap-timepicker.js"> </script>
 		<script type="text/javascript" src="js/select2.min.js"> </script>
+		<script type="text/javascript" src="js/jquery.flot.js"> </script>
 		<script type="text/javascript" src="js/main.js"> </script>
+		<script type="text/javascript" src="js/graph.js"> </script>
 	</body>
 </html>

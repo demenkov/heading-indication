@@ -29,3 +29,8 @@ div.description p, div.about p {
 	font-weight	:200;
 	line-height	:30px;
 }
+
+#sphere {
+	width	:400px;
+	height	:400px
+}
