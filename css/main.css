@@ -5,10 +5,9 @@ body {
 
 @media (min-width: 1200px) {
 	body {
-		background-image	:url("../img/sextant.jpg"); 
+		background-image	:url("../img/sextant.jpg");
 		background-repeat	:no-repeat;
 		background-position	:95% 80%;
-		
 	}
 }
 
@@ -24,7 +23,7 @@ body {
 	border-color: #CCCCCC;
 }
 
-div.description p, div.about p {
+div.description p, div.description ul, div.about p {
 	font-size	:18px;
 	font-weight	:200;
 	line-height	:30px;
@@ -33,4 +32,12 @@ div.description p, div.about p {
 #sphere {
 	width	:400px;
 	height	:400px
+}
+
+div.point {
+	font-size:1.5em;
+}
+
+div.description li {
+	 margin: 0 0 10px;
 }

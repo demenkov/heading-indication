@@ -14,7 +14,106 @@ jQuery(document).ready(function($) {
 		sphereRadius = 6,
 		earthRadius = 2.5,
 		earthX = 0,
-		earthY = -2.5;
+		earthY = -2.5,
+		points = [
+			{
+				x		: -sphereRadius*Math.cos(Math.PI/4),
+				y		: -sphereRadius*Math.sin(Math.PI/4),
+				letter	: 'P\'',
+				label	: 'Южный полюс мира',
+				left	: -15,
+				top		: 10,
+				color	: '#ea8df7',
+			},
+			{
+				x		: sphereRadius*Math.cos(Math.PI/4),
+				y		: sphereRadius*Math.sin(Math.PI/4),
+				letter	: 'P',
+				label	: 'Северный полюс мира',
+				left	: 10,
+				top		: -15,
+				color	: '#ea8df7',
+			},
+			{
+				x		: sphereRadius*Math.cos(Math.PI/4),
+				y		: -sphereRadius*Math.sin(Math.PI/4),
+				letter	: 'Q',
+				left	: 10,
+				top		: -5,
+				color	: '#911e42',
+			},
+			{
+				x		: -sphereRadius*Math.cos(Math.PI/4),
+				y		: sphereRadius*Math.sin(Math.PI/4),
+				letter	: 'Q\'',
+				left	: -15,
+				top		: -30,
+				color	: '#911e42',
+			},
+			{
+				x		: -6,
+				y		: 0,
+				letter	: 'S',
+				label	: 'Точка юга',
+				left	: -25,
+				top		: -10,
+				color	: '#EDC240',
+			},
+			{
+				x		: 6,
+				y		: 0,
+				letter	: 'N',
+				label	: 'Точка севера',
+				left	: 10,
+				top		: -10,
+				color	: '#EDC240',
+			},
+			{
+				x		: -2.4,
+				y		: 1.1,
+				letter	: 'C',
+				label	: 'Местоположение светила',
+				left	: 10,
+				top		: -10,
+				color	: '#CB4B4B',
+			},
+			{
+				x		: 1.1,
+				y		: 2.4,
+				letter	: 'W',
+				label	: 'Точка запада',
+				left	: 5,
+				top		: -25,
+				color	: '#EDC240',
+			},
+			{
+				x		: 0,
+				y		: -6,
+				letter	: 'n',
+				label	: 'Надир',
+				left	: -5,
+				top		: 5,
+				color	: '#000000',
+			},
+			{
+				x		: 0,
+				y		: 6,
+				letter	: 'Z',
+				label	: 'Зенит',
+				left	: -5,
+				top		: -30,
+				color	: '#000000',
+			},
+			{
+				x		: -1.1,
+				y		: -2.45,
+				letter	: 'E',
+				label	: 'Точка востока',
+				left	: -5,
+				top		: -30,
+				color	: '#EDC240',
+			}
+		];
 	for (var phi = 0; phi <= 2 * Math.PI; phi+=0.01) {
 		circle.push([sphereRadius*Math.cos(phi), sphereRadius*Math.sin(phi)]);
 	}
@@ -48,9 +147,7 @@ jQuery(document).ready(function($) {
 	for (var c = -sphereRadius; c <= sphereRadius; c+=0.01) {
 		PP.push([c*Math.cos(Math.PI/4),c*Math.sin(Math.PI/4)]);
 	}
-	var plot = $.plot(
-		$("#sphere"),
-		[
+	var graphics = [
 			{
 				data: xAxis,
 				lines: {
@@ -77,7 +174,7 @@ jQuery(document).ready(function($) {
 				points: {
 					show: false
 				},
-				color: '#d5d5d5',
+				color: '#000000',
 			},
 			{
 				data: earth,
@@ -106,7 +203,7 @@ jQuery(document).ready(function($) {
 					show: true,
 					fill: false
 				},
-				color: '#d5d5d5'
+				color: '#911e42'
 			},
 			{
 				data: circle,
@@ -150,7 +247,9 @@ jQuery(document).ready(function($) {
 					show: true,
 					fill: false
 				},
-				color: '#d5d5d5'
+				color: '#d5d5d5',
+				label : 'Меридиан'
+
 			},
 			{
 				data: verticalLights,
@@ -161,25 +260,22 @@ jQuery(document).ready(function($) {
 				color: '#CB4B4B',
 				label: 'Вертикал светила'
 			},
-			{
-				data: [[-sphereRadius*Math.cos(Math.PI/4),-sphereRadius*Math.sin(Math.PI/4)]],
-				points: {
-					show: true,
-					lineWidth: 7,
-					symbol: 'circle'
-				},
-				color: '#CB4B4B',
+		];
+	for (var i in points) {
+		graphics.push({
+			data: [[points[i].x,points[i].y]],
+			points: {
+				show: true,
+				radius: 7,
+				symbol: 'circle',
 			},
-			{
-				data: [[sphereRadius*Math.cos(Math.PI/4),sphereRadius*Math.sin(Math.PI/4)]],
-				points: {
-					show: true,
-					lineWidth: 7,
-					symbol: 'circle'
-				},
-				color: '#CB4B4B',
-			},
-		],
+			label: points[i].label ? points[i].label : null,
+			color: points[i].color,
+		});
+	}
+	var plot = $.plot(
+		$("#sphere"),
+		graphics,
 		{
 			yaxis: {
 				min: -6.5,
@@ -200,11 +296,10 @@ jQuery(document).ready(function($) {
 			}
 		}
 	);
-	var Q = plot.pointOffset({ x: -sphereRadius*Math.cos(Math.PI/4), y: -sphereRadius*Math.sin(Math.PI/4)});
-	var Qs = plot.pointOffset({ x: sphereRadius*Math.cos(Math.PI/4), y: sphereRadius*Math.sin(Math.PI/4)});
-	$("#sphere").append('<div style="position:absolute;left:' + (Q.left - 15) + 'px;top:' + Q.top + 'px;">Q</div>');
-	$("#sphere").append('<div style="position:absolute;left:' + (Qs.left + 10) + 'px;top:' + (Qs.top - 15) + 'px;">Q\'</div>');
-
+	for (var i in points) {
+		var point = plot.pointOffset({ x: points[i].x, y: points[i].y});
+		$("#sphere").append('<div class = "point" style="position:absolute;left:' + (point.left + points[i].left) + 'px;top:' + (point.top + points[i].top) + 'px;">' + points[i].letter + '</div>');
+	}
 
 	function showTooltip(x, y, contents) {
 		$('<div id="tooltip">' + contents + '</div>').css( {
@@ -233,7 +328,6 @@ jQuery(document).ready(function($) {
 					showTooltip(item.pageX, item.pageY,
 								item.series.label);
 				}
-				//console.log(item.pageX, item.pageY);
 			}
 		}
 		else {
