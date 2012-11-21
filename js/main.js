@@ -10,6 +10,10 @@ jQuery(document).ready(function($) {
 		return number * 180 / Math.PI;
 	}
 
+	Math.sec = function(number) {
+		return 1/Math.cos(number);
+	}
+
 	Math.cosec = function(number) {
 		return 1/Math.sin(number);
 	}
@@ -135,6 +139,8 @@ jQuery(document).ready(function($) {
 	.add('#inputTime')
 	.on('keyup', calculate);
 
+	$('#starName').on('change', calculate)
+
 	$('input[name="starSelect"]').add('input[name="sunSelect"]').on('click', calculate);
 
 	$('#inputTime').on('change', calculate);
@@ -206,7 +212,7 @@ jQuery(document).ready(function($) {
 			north = $('.btn.north').hasClass('active') ?  'north' : 'south',
 			zone = parseInt($('#timeZone').val());
 
-		var date = {
+/*		var date = {
 			day			: parseInt(d[0]),
 			month		: parseInt(d[1]),
 			year		: parseInt(d[2])
@@ -274,9 +280,9 @@ jQuery(document).ready(function($) {
 		var W = Math.acos((Math.sin(-0.83) - Math.sin(lat) * Math.sin(beta)) / (Math.sin(lat) * Math.cos(beta)));
 		if (W) {
 			$('#inputSunLha').val(Math.deg(W).toFixed(2));
-		}
+		}*/
 
-		/*var date = {
+		var date = {
 			day			: parseInt(d[0]),
 			month		: parseInt(d[1]),
 			year		: parseInt(d[2]),
@@ -284,23 +290,17 @@ jQuery(document).ready(function($) {
 			yearStroke	: (parseInt(d[1]) <= 2) ? parseInt(d[2]) - 1 : parseInt(d[2]),
 		};
 		var time = {
-			hours	: west ? parseInt(t[0]) - zone : parseInt(t[0]) + zone,
+			hours	: parseInt(t[0]),
 			minutes	: parseInt(t[1]),
 			seconds	: parseInt(t[2])
 		};
-		var UT = time.hours + time.minutes/60 + time.seconds/3600;//(12.3)
-		var JD = 1720996.5 -
-			Math.round(date.yearStroke/100) +
-			Math.round(date.yearStroke/400) +
-			Math.round(365.25 * date.yearStroke) +
-			Math.round(30.6 * (date.monthStroke + 1)) +
-			date.day +
-			UT/24;//(2.20)
-		var d = JD - 2400000.5;
-		var tau			= JD/36525; //(12.2)
+		var hours = west ? parseInt(t[0]) - zone : parseInt(t[0]) + zone;
+		var UT = hours + time.minutes/60 + time.seconds/3600;//(12.3)
+		var d 			= Math.round(365.25 * date.yearStroke) + Math.round(30.6 * (date.monthStroke + 1)) + date.day + UT/24;
+		var tau			= d/36525; //(12.2)
 		var M0Sun		= 359.9286;
 		var K0			= 1.9154;
-		var E0			= 23.4412;
+		var eps0		= 23.4412;
 		var Omega0Moon	= 55.199;
 		var L0			= 279.6034;
 		var S0			= 99.6056;
@@ -320,35 +320,36 @@ jQuery(document).ready(function($) {
 
 		var L				= L0 + deltaL + deltaLstroke; //(12.11)
 		var lambdaSun		= L + nu + deltaPsi; //(12.9)
-		var deltaE			= 0.002666 * Math.cos(OmegaMoon); //(12.7)
-		var E				= E0 - 0.013012 * tau + deltaE; //(12.6)
-		var betaSun			= Math.asin(Math.sin(lambdaSun) * Math.sin(E)); // (12.5)
+		var deltaEps		= 0.002666 * Math.cos(OmegaMoon); //(12.7)
+		var eps				= eps0 - 0.013012 * tau + deltaEps; //(12.6)
+		var betaSun			= Math.asin(Math.sin(lambdaSun) * Math.sin(eps)); // (12.5)
 		var alphaStrokeSun	= Math.acos(Math.cos(lambdaSun) / Math.cos(betaSun)); //(12.4)
 		var alphaSun		= (betaSun > 0) ? alphaStrokeSun : 360 - alphaStrokeSun;
 
 
 		var fullLongitude	= longitude + longitudeSec / 60;
+		fullLongitude *= (west) ? -1 : 1;
 		var fullLatitude	= latitude + latitudeSec / 60;
+		fullLatitude *= (north) ? 1 : -1;
 
-		var timegr = S0 + deltaL + deltaPsi * Math.cos(E); // (12.28)
+		var timegr = S0 + deltaL + deltaPsi * Math.cos(eps); // (12.28)
 		timegr = (timegr > 360) ? ((timegr/360) - Math.round(timegr/360)) * 360 - 180 : timegr; //(12.29)
 		timegr = (timegr < 0) ? timegr + 360 : timegr; // (12.30)
 		var timegrSpider = timegr + 360.98565 * (UT/24) - alphaSun; //(12.31)
 		var sunLha = (west) ? timegrSpider - fullLongitude  : timegrSpider + fullLongitude; // (12.32)
 
-		var azimuth = (Math.atan(Math.cos(Math.rad(fullLatitude)) * Math.tan(Math.rad(betaSun)) * Math.cosec(Math.rad(sunLha)) - Math.sin(Math.rad(fullLatitude)) * Math.cot(Math.rad(sunLha))))/60;
+		var azimuth = Math.azimuth(fullLongitude,fullLatitude,date.year,date.month,date.day,time.hours,time.minutes,zone);
 
-		azimuth = azimuth*57.3;
-		var deltaKSun = azimuth - cp;*/
+		var deltaKSun = azimuth - cp;
 
-
-
-		/*if (sunLha) {
+		if (sunLha) {
 			$('#inputSunLha').val(sunLha.toFixed(2));
 		}
 
 		if (betaSun) {
 			$('#inputSunGradient').val(betaSun.toFixed(2));
+			var letter = (betaSun > 0) ? 'N' : 'S';
+			$('#inputSunGradient').siblings('.add-on').html(letter);
 		}
 
 		if (alphaSun) {
@@ -361,7 +362,48 @@ jQuery(document).ready(function($) {
 
 		if (deltaKSun && star) {
 			$('#inputCompass').val(deltaKSun.toFixed(2));
-		}*/
+		}
+
+		//stars
+		var alpha0 = parseFloat($('#starName option:selected').attr('ra'));
+		var beta0 = parseFloat($('#starName option:selected').attr('dec'));
+		var deltaAlphaPR = (1.2808 + 0.5566 * Math.tan(beta0 * Math.sin(alpha0)))*tau;
+		var deltaBetaPR = 0.5566 * Math.cos(alpha0) * tau;
+		var deltaAlphaN = deltaPsi * Math.cos(eps) + Math.sin(eps) * Math.sin(alpha0) * Math.tan(beta0) - deltaEps * Math.tan(beta0) * Math.cos(alpha0);
+		var deltaBetaN = deltaPsi * Math.sin(eps) * Math.cos(alpha0) + deltaEps * Math.sin(alpha0);
+		var deltaAlphaA = -0.0057 * Math.sec(beta0) * (Math.sin(L) * Math.cos(eps) + Math.cos(L) * Math.cos(alpha0) * Math.cos(eps));
+		var deltaBetaA = -0.0057 * Math.sin(L) * Math.cos(alpha0) * Math.sin(beta0) + Math.cos(L) * ( Math.sin(eps) * Math.cos(beta0) + Math.cos(eps) * Math.cos(alpha0) * Math.sin(beta0));
+		var tgr = S0 + deltaL + deltaPsi * Math.cos(eps);
+		tgr = (tgr > 360) ? (tgr/360 - Math.round(tgr/360)) * 360 - 180 : tgr;
+		tgr = (tgr < 0) ? tgr + 360 : tgr;
+		var alphaSpider = alpha0 + deltaAlphaPR * tau + deltaAlphaN + deltaAlphaA;
+		var betaSpider = alpha0 + deltaBetaPR * tau + deltaBetaN + deltaBetaA;
+		var tgrSpider = tgr + 360.98565 * (UT/24) - alphaSpider;
+		var tmSpider = tgrSpider + fullLongitude;
+
+		var azimuth = (Math.atan(Math.cos(Math.rad(fullLatitude)) * Math.tan(Math.rad(alphaSpider)) * Math.cosec(Math.rad(tmSpider)) - Math.sin(Math.rad(fullLatitude)) * Math.cot(Math.rad(tmSpider))))/60;
+		var deltaKStar = cp - azimuth;
+
+		if (alphaSpider) {
+			$('#inputStarRa').val(alphaSpider.toFixed(2));
+		}
+		if (betaSpider) {
+			$('#inputStarGradient').val(betaSpider.toFixed(2));
+			var letter = (betaSpider > 0) ? 'N' : 'S';
+			$('#inputStarGradient').siblings('.add-on').html(letter);
+		}
+		if (tmSpider) {
+			$('#inputStarLha').val(tmSpider.toFixed(2))
+		}
+		if (azimuth) {
+			$('#inputStarAzimuth').val(azimuth.toFixed(2));
+		}
+
+		if (deltaKStar && !star) {
+			$('#inputCompass').val(deltaKStar.toFixed(2));
+		}
+
+
 	}
 
 	//change buttons state at the same time
