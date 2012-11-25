@@ -124,8 +124,8 @@ jQuery(document).ready(function($) {
 		if (val > 12) {
 			val = 12;
 		}
-		if (val < -12 || isNaN(val)) {
-			val = -12;
+		if (val < 0 || isNaN(val)) {
+			val = 0;
 		}
 		$(this).val(val);
 		calculate();
@@ -173,7 +173,7 @@ jQuery(document).ready(function($) {
 		M = k*M;
 		var Lo=280.46645+36000.76983*T+0.0003032*T*T
 		Lo=Lo % 360
-		var DL=(1.9146-0.004817*T-0.000014*T*T)*Math.sin(M)+(0.019993-0.000101*T)*Math.sin(2*M)+0.00029*Math.sin(3*M)
+		var DL=(1.9146-0.004817*T-0.000014*T*T)*Math.sin(M)+(0.019993-0.000101*T)*Math.sin(2*M)+0.00029*Math.sin(3*M) //C
 		var L=Lo+DL
 		var omega = 125.04 - 1934.136*T;
 		var lambda = L - 0.00569 - 0.00478*Math.sin(k*omega);
@@ -225,8 +225,10 @@ jQuery(document).ready(function($) {
 			cp = parseFloat($('#cp').val()),
 			star = $('input[name="starSelect"]').attr('checked') ? true : false,
 			west = $('#westEast').val() == 'west' ? true : false,
+			westZone = $('#westEastZone').val() == 'west' ? true : false,
 			north = $('.btn.north').hasClass('active') ?  'north' : 'south',
 			zone = parseInt($('#timeZone').val());
+		zone *= westZone ? -1: 1;
 
 		var date = {
 			day			: parseInt(d[0]),
@@ -295,12 +297,18 @@ jQuery(document).ready(function($) {
 	//change buttons state at the same time
 	$('.westEast .btn.east').on('click', function(e) {
 		$('#westEast').val('east');
-		$('.westEast .btn.east').not($(this)).button('toggle');
 		calculate();
 	});
 	$('.westEast .btn.west').on('click', function(e) {
 		$('#westEast').val('west');
-		$('.westEast .btn.west').not($(this)).button('toggle');
+		calculate();
+	});
+	$('.westEastZone .btn.west').on('click', function(e) {
+		$('#westEastZone').val('west');
+		calculate();
+	});
+	$('.westEastZone .btn.east').on('click', function(e) {
+		$('#westEastZone').val('east');
 		calculate();
 	});
 
@@ -320,6 +328,7 @@ jQuery(document).ready(function($) {
 		if (!$(stars).filter(':selected').length) {
 			$('#starName').select2('val', $(stars[0]).val());
 		}
+		calculate();
 	}
 
 	function getAvailableStars(el) {
