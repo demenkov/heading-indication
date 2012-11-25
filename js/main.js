@@ -22,6 +22,11 @@ jQuery(document).ready(function($) {
 		return 1/Math.tan(number);
 	}
 
+	Date.prototype.getDOY = function() {
+		var onejan = new Date(this.getFullYear(),0,1);
+		return Math.ceil((this - onejan) / 86400000);
+	}
+
 	//enable content tabs
 	$('#mainMenu a').click(function (e) {
 		e.preventDefault();
@@ -188,10 +193,13 @@ jQuery(document).ready(function($) {
 		var azm=(1/k)*Math.atan2(-Math.sin(H*k),Math.cos(la*k)*Math.tan(delta*k)-Math.sin(la*k)*Math.cos(H*k));
 		azm=(azm+360) % 360;
 
+		var ha = (ho*60 + mi + (eqt - 4*lg - 60*zo))/4-180 ;
+
 		return {
-			ra: RA,
-			azimuth : azm,
-			dec: Math.deg(declin)
+			ha		: ha,
+			ra		: RA,
+			azimuth	: azm,
+			dec		: Math.deg(declin)
 		};
 	}
 
@@ -239,6 +247,10 @@ jQuery(document).ready(function($) {
 
 		var sun = Math.sun(fullLongitude,fullLatitude,date.year,date.month,date.day,time.hours,time.minutes,zone);
 		var deltaKSun = cp - sun.azimuth;
+
+		if (sun.ha) {
+			$('#inputSunLha').val(sun.ha.toFixed(2))
+		}
 
 		if (sun.dec) {
 			$('#inputSunGradient').val(sun.dec.toFixed(2));
