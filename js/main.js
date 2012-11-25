@@ -226,7 +226,7 @@ jQuery(document).ready(function($) {
 			star = $('input[name="starSelect"]').attr('checked') ? true : false,
 			west = $('#westEast').val() == 'west' ? true : false,
 			westZone = $('#westEastZone').val() == 'west' ? true : false,
-			north = $('.btn.north').hasClass('active') ?  'north' : 'south',
+			north = $('#northSouth').val() == 'north' ?  true : false,
 			zone = parseInt($('#timeZone').val());
 		zone *= westZone ? -1: 1;
 
@@ -309,6 +309,14 @@ jQuery(document).ready(function($) {
 	});
 	$('.westEastZone .btn.east').on('click', function(e) {
 		$('#westEastZone').val('east');
+		calculate();
+	});
+	$('.northSouth .btn.north').on('click', function(e) {
+		$('#northSouth').val('north');
+		calculate();
+	});
+	$('.northSouth .btn.south').on('click', function(e) {
+		$('#northSouth').val('south');
 		calculate();
 	});
 
