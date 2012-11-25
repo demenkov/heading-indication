@@ -53,7 +53,7 @@ jQuery(document).ready(function($) {
 	});
 	//add time interactivity
 	$('#inputTime').timepicker({
-		defaultTime		: '22:53:51',
+		defaultTime		: '21:57:08',
 		showMeridian	: false,
 		showSeconds		: true
 	});
@@ -119,8 +119,8 @@ jQuery(document).ready(function($) {
 		if (val > 12) {
 			val = 12;
 		}
-		if (val < 0 || isNaN(val)) {
-			val = 0;
+		if (val < -12 || isNaN(val)) {
+			val = -12;
 		}
 		$(this).val(val);
 		calculate();
@@ -147,34 +147,38 @@ jQuery(document).ready(function($) {
 
 
 
-	function ut(h,m,z)
-	{
+	function ut(h,m,z) {
 		return (h-z+m/60);
 	}
 
-	function jd(y,m,d,u)
-	{
+	function jd(y,m,d,u) {
 		return (367*y)-Math.floor((7/4)*(Math.floor((m+9)/12)+y))+Math.floor(275*m/9)+d-730531.5+(u/24)
 	}
 
 	//http://wildphoto.irk.ru/travel/sun.html
 	//http://planetcalc.ru/320/?language_select=ru
 
-	Math.azimuth = function(lg,la,ye,mo,da,ho,mi,zo) {
+	Math.sun = function(lg,la,ye,mo,da,ho,mi,zo) {
 		var uu=ut(ho,mi,zo);
 		var jj=jd(ye,mo,da,uu);
 		var T=jj/36525;
 		var k=Math.PI/180.0;
 		var M=357.5291+35999.0503*T-0.0001559*T*T-0.00000045*T*T*T
 		M=M % 360
+		M = k*M;
 		var Lo=280.46645+36000.76983*T+0.0003032*T*T
 		Lo=Lo % 360
-		var DL=(1.9146-0.004817*T-0.000014*T*T)*Math.sin(k*M)+(0.019993-0.000101*T)*Math.sin(k*2*M)+0.00029*Math.sin(k*3*M)
+		var DL=(1.9146-0.004817*T-0.000014*T*T)*Math.sin(M)+(0.019993-0.000101*T)*Math.sin(2*M)+0.00029*Math.sin(3*M)
 		var L=Lo+DL
-		var eps=23.43999-0.013*T
+		var omega = 125.04 - 1934.136*T;
+		var lambda = L - 0.00569 - 0.00478*Math.sin(k*omega);
+		var eps=23.43999-0.013*T;
 		var delta=(1/k)*Math.asin(Math.sin(L*k)*Math.sin(eps*k))
 		var RA=(1/k)*Math.atan2(Math.cos(eps*k)*Math.sin(L*k),Math.cos(L*k))
+
 		RA=(RA+360) % 360
+
+		var declin = Math.sin(k*eps)*Math.sin(k*lambda);
 
 		var GMST=280.46061837+360.98564736629*jj+0.000387933*T*T-T*T*T/38710000
 		GMST=(GMST+360) % 360
@@ -184,7 +188,11 @@ jQuery(document).ready(function($) {
 		var azm=(1/k)*Math.atan2(-Math.sin(H*k),Math.cos(la*k)*Math.tan(delta*k)-Math.sin(la*k)*Math.cos(H*k));
 		azm=(azm+360) % 360;
 
-		return azm;
+		return {
+			ra: RA,
+			azimuth : azm,
+			dec: Math.deg(declin)
+		};
 	}
 
 	function calculate() {
@@ -212,7 +220,7 @@ jQuery(document).ready(function($) {
 			north = $('.btn.north').hasClass('active') ?  'north' : 'south',
 			zone = parseInt($('#timeZone').val());
 
-/*		var date = {
+		var date = {
 			day			: parseInt(d[0]),
 			month		: parseInt(d[1]),
 			year		: parseInt(d[2])
@@ -224,167 +232,33 @@ jQuery(document).ready(function($) {
 			zone	: zone
 		};
 
-		//http://en.wikipedia.org/wiki/Julian_date
-		var a = (14 - date.month) / 12;
-		var y = date.year + 4800 - a;
-		var m = date.month + 12 * a - 3;
-		var JDN = date.day + ((153 * m) + 2) / 5 + 365 * y + y/4 - y/100 + y/400 - 32045;
-		var JD = JDN + (time.hours - 12) / 24 + (time.minutes) / 1440 + (time.seconds) / 3600;
-
-		//http://en.wikipedia.org/wiki/Position_of_the_Sun
-		var n = JD - 2451545.0;
-		var L = 280.460 + 0.9856474 * n;
-		L = (L > 360) ? L - 360 : ((L < 0) ? L + 360 : L);
-		var g = 357.528 + 0.9856003 * n;
-		g = (g > 360) ? g - 360 : ((g < 0) ? g + 360 : g);
-		var lambda = L + 1.915 * Math.sin(g) + 0.020 * Math.sin(2*g);
-		var R = 1.00014 - 0.01671 * Math.cos(g) - 0.00014 * Math.cos(2*g);
-		var eps = 23.439 - 0.0000004;
-		var alpha = Math.atan(Math.cos(eps)*Math.tan(lambda));
-		var beta = Math.asin(Math.sin(eps)*Math.sin(lambda));
-
-		if (alpha) {
-			$('#inputSunGradient').val(Math.deg(alpha).toFixed(2));
-		}
-
-		if (beta) {
-			$('#inputSunRa').val(Math.deg(beta).toFixed(2));
-		}
-
-		var fullLongitude	= longitude + longitudeSec / 60;
-		fullLongitude *= (west) ? -1 : 1;
-		var fullLatitude	= latitude + latitudeSec / 60;
-
-		var azimuth = Math.azimuth(fullLongitude,fullLatitude,date.year,date.month,date.day,time.hours,time.minutes,zone);
-
-		if (azimuth) {
-			$('#inputSunAzimuth').val(azimuth.toFixed(2));
-		}
-
-		var deltaKSun = azimuth - cp;
-
-		if (deltaKSun && star) {
-			$('#inputCompass').val(deltaKSun.toFixed(2) * -1);
-		}
-
-		//http://en.wikipedia.org/wiki/Sunrise_equation
-		var nSpider = JD - 2451545.0009 + fullLongitude/360;
-		var n = nSpider + 0.5;
-		var jSpider  = 2451545.0009 + fullLongitude/360 + n;
-		var M = 357.5291 + 0.98560028 * (jSpider - 2451545) % 360;
-		var C = 1.9148 * Math.sin(M) + 0.0200 * Math.sin(2*M) + 0.0003 * Math.sin(3*M);
-		var lambda = (M +102.9372+C+180) % 360;
-		var jTransit = jSpider + 0.0053 * Math.sin(M) - 0.0069 * Math.sin(2*lambda);
-		var beta = Math.asin(Math.sin(lambda) * Math.sin(23.45));
-		var lat = longitude + longitudeSec / 60;
-		var W = Math.acos((Math.sin(-0.83) - Math.sin(lat) * Math.sin(beta)) / (Math.sin(lat) * Math.cos(beta)));
-		if (W) {
-			$('#inputSunLha').val(Math.deg(W).toFixed(2));
-		}*/
-
-		var date = {
-			day			: parseInt(d[0]),
-			month		: parseInt(d[1]),
-			year		: parseInt(d[2]),
-			monthStroke	: (parseInt(d[1]) <= 2) ? parseInt(d[1]) + 12 : parseInt(d[1]),
-			yearStroke	: (parseInt(d[1]) <= 2) ? parseInt(d[2]) - 1 : parseInt(d[2]),
-		};
-		var time = {
-			hours	: parseInt(t[0]),
-			minutes	: parseInt(t[1]),
-			seconds	: parseInt(t[2])
-		};
-		var hours = west ? parseInt(t[0]) - zone : parseInt(t[0]) + zone;
-		var UT = hours + time.minutes/60 + time.seconds/3600;//(12.3)
-		var d 			= Math.round(365.25 * date.yearStroke) + Math.round(30.6 * (date.monthStroke + 1)) + date.day + UT/24;
-		var tau			= d/36525; //(12.2)
-		var M0Sun		= 359.9286;
-		var K0			= 1.9154;
-		var eps0		= 23.4412;
-		var Omega0Moon	= 55.199;
-		var L0			= 279.6034;
-		var S0			= 99.6056;
-
-		var RSun			= 0.26696 + 0.00447 * Math.cos(M0Sun); //(12.19)
-		var deltaMStroke	= 0.985647 * (UT / 24); //(12.18)
-		var deltaM			= 35999.05 * tau; //(12.17)
-		var OmegaMoon		= Omega0Moon - 1934.14 * tau; // (12.8)
-
-		var MSun 	= M0Sun + deltaM + deltaMStroke; //(12.16)
-		var K		= K0 - 0.004881 * tau; //(12.15)
-
-		var nu				= K * Math.sin(MSun) + 0.02 * Math.sin(2 * MSun); //(12.14)
-		var deltaPsi		= -0.00479 * Math.sin(OmegaMoon); //(12.9)
-		var deltaL			= 36000 * tau + 0.768925 * tau; //(12.2)
-		var deltaLstroke	= 0.985647 * UT / 24; //(12.13)
-
-		var L				= L0 + deltaL + deltaLstroke; //(12.11)
-		var lambdaSun		= L + nu + deltaPsi; //(12.9)
-		var deltaEps		= 0.002666 * Math.cos(OmegaMoon); //(12.7)
-		var eps				= eps0 - 0.013012 * tau + deltaEps; //(12.6)
-		var betaSun			= Math.asin(Math.sin(lambdaSun) * Math.sin(eps)); // (12.5)
-		var alphaStrokeSun	= Math.acos(Math.cos(lambdaSun) / Math.cos(betaSun)); //(12.4)
-		var alphaSun		= (betaSun > 0) ? alphaStrokeSun : 360 - alphaStrokeSun;
-
-
 		var fullLongitude	= longitude + longitudeSec / 60;
 		fullLongitude *= (west) ? -1 : 1;
 		var fullLatitude	= latitude + latitudeSec / 60;
 		fullLatitude *= (north) ? 1 : -1;
 
-		var timegr = S0 + deltaL + deltaPsi * Math.cos(eps); // (12.28)
-		timegr = (timegr > 360) ? ((timegr/360) - Math.round(timegr/360)) * 360 - 180 : timegr; //(12.29)
-		timegr = (timegr < 0) ? timegr + 360 : timegr; // (12.30)
-		var timegrSpider = timegr + 360.98565 * (UT/24) - alphaSun; //(12.31)
-		var sunLha = (west) ? timegrSpider - fullLongitude  : timegrSpider + fullLongitude; // (12.32)
+		var sun = Math.sun(fullLongitude,fullLatitude,date.year,date.month,date.day,time.hours,time.minutes,zone);
+		var deltaKSun = cp - sun.azimuth;
 
-		var azimuth = Math.azimuth(fullLongitude,fullLatitude,date.year,date.month,date.day,time.hours,time.minutes,zone);
-
-		var deltaKSun = azimuth - cp;
-
-		if (sunLha) {
-			$('#inputSunLha').val(sunLha.toFixed(2));
-		}
-
-		if (betaSun) {
-			$('#inputSunGradient').val(betaSun.toFixed(2));
-			var letter = (betaSun > 0) ? 'N' : 'S';
+		if (sun.dec) {
+			$('#inputSunGradient').val(sun.dec.toFixed(2));
+			var letter = (sun.dec > 0) ? 'N' : 'S';
 			$('#inputSunGradient').siblings('.add-on').html(letter);
 		}
 
-		if (alphaSun) {
-			$('#inputSunRa').val(alphaSun.toFixed(2));
+		if (sun.ra) {
+			$('#inputSunRa').val(sun.ra.toFixed(2));
 		}
 
-		if (azimuth) {
-			$('#inputSunAzimuth').val(azimuth.toFixed(2));
+		if (sun.azimuth) {
+			$('#inputSunAzimuth').val(sun.azimuth.toFixed(2));
 		}
 
 		if (deltaKSun && star) {
 			$('#inputCompass').val(deltaKSun.toFixed(2));
 		}
 
-		//stars
-		var alpha0 = parseFloat($('#starName option:selected').attr('ra'));
-		var beta0 = parseFloat($('#starName option:selected').attr('dec'));
-		var deltaAlphaPR = (1.2808 + 0.5566 * Math.tan(beta0 * Math.sin(alpha0)))*tau;
-		var deltaBetaPR = 0.5566 * Math.cos(alpha0) * tau;
-		var deltaAlphaN = deltaPsi * Math.cos(eps) + Math.sin(eps) * Math.sin(alpha0) * Math.tan(beta0) - deltaEps * Math.tan(beta0) * Math.cos(alpha0);
-		var deltaBetaN = deltaPsi * Math.sin(eps) * Math.cos(alpha0) + deltaEps * Math.sin(alpha0);
-		var deltaAlphaA = -0.0057 * Math.sec(beta0) * (Math.sin(L) * Math.cos(eps) + Math.cos(L) * Math.cos(alpha0) * Math.cos(eps));
-		var deltaBetaA = -0.0057 * Math.sin(L) * Math.cos(alpha0) * Math.sin(beta0) + Math.cos(L) * ( Math.sin(eps) * Math.cos(beta0) + Math.cos(eps) * Math.cos(alpha0) * Math.sin(beta0));
-		var tgr = S0 + deltaL + deltaPsi * Math.cos(eps);
-		tgr = (tgr > 360) ? (tgr/360 - Math.round(tgr/360)) * 360 - 180 : tgr;
-		tgr = (tgr < 0) ? tgr + 360 : tgr;
-		var alphaSpider = alpha0 + deltaAlphaPR * tau + deltaAlphaN + deltaAlphaA;
-		var betaSpider = alpha0 + deltaBetaPR * tau + deltaBetaN + deltaBetaA;
-		var tgrSpider = tgr + 360.98565 * (UT/24) - alphaSpider;
-		var tmSpider = tgrSpider + fullLongitude;
-
-		var azimuth = (Math.atan(Math.cos(Math.rad(fullLatitude)) * Math.tan(Math.rad(alphaSpider)) * Math.cosec(Math.rad(tmSpider)) - Math.sin(Math.rad(fullLatitude)) * Math.cot(Math.rad(tmSpider))))/60;
-		var deltaKStar = cp - azimuth;
-
-		if (alphaSpider) {
+		/*if (alphaSpider) {
 			$('#inputStarRa').val(alphaSpider.toFixed(2));
 		}
 		if (betaSpider) {
@@ -401,7 +275,7 @@ jQuery(document).ready(function($) {
 
 		if (deltaKStar && !star) {
 			$('#inputCompass').val(deltaKStar.toFixed(2));
-		}
+		}*/
 
 
 	}
