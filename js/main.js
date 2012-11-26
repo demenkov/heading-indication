@@ -235,7 +235,7 @@ jQuery(document).ready(function($) {
 		tgr = (tgr+360)%360;
 		var tgrs = tgr-alphaStar+360.98565*((ho+mi/60+se/3600)/24)
 
-		var azimuth = Math.deg(Math.atan(Math.cos(Math.rad(la)) * Math.tan(Math.rad(alphaStar)) * Math.cosec(Math.rad(tgrs)) - Math.sin(Math.rad(la)) * Math.cot(Math.rad(tgrs))));
+		var azimuth = Math.deg(Math.atan(Math.cos(Math.rad(lg)) * Math.tan(Math.rad(alphaStar)) * Math.cosec(Math.rad(tgrs)) - Math.sin(Math.rad(lg)) * Math.cot(Math.rad(tgrs))));
 
 		return {
 			ha		: tgrs,
