@@ -160,6 +160,38 @@ jQuery(document).ready(function($) {
 		return (367*y)-Math.floor((7/4)*(Math.floor((m+9)/12)+y))+Math.floor(275*m/9)+d-730531.5+(u/24)
 	}
 
+	function JulianDay(yy,mm,dd) {
+		var tulos;
+		tulos =367*yy-Math.floor(7*(yy+Math.floor((mm+9)/12))/4)
+		-Math.floor(3*(Math.floor((yy+(mm-9)/7)/100)+1)/4)
+		+Math.floor(275*mm/9)+dd+1721028.5;
+		return tulos;
+	}
+	function Greenwich (yy,mm,dd,time) {
+		// calculates Greenwich sidereal time in hours
+		var T,JD,GWT0,GW,GMST;
+		JD = JulianDay(yy,mm,dd);
+		// JD is Julian Day
+		T = (JD - 2451545.0)/36525;
+		// GWT0 is Greenwich Sidereal Time in hours
+		GWT0 = (24110.54841+8640184.812866*T+0.093104*T*T-0.0000062*T*T*T)/3600;
+		if (GWT0 >= 24)
+		GW = GWT0 - 24*Math.floor(GWT0/24);
+		if (GWT0 <= - 24)
+		GW = 24 -(Math.abs(GWT0) - 24*Math.floor(Math.abs(GWT0)/24));
+		GMST = GW + 1.00273790935*time;
+		if (GMST >= 24)
+		GMST = GMST - 24;
+		if (GMST < 0 )
+		GMST = GMST + 24;
+		return GMST;
+	}
+
+	function Deg(as,min,sek) {
+		// converts degree,min,sec to degree
+		return (as + min/60 + sek/3600);
+	}
+
 	//http://wildphoto.irk.ru/travel/sun.html
 	//http://planetcalc.ru/320/?language_select=ru
 
@@ -207,7 +239,44 @@ jQuery(document).ready(function($) {
 		var uu=ut(ho,mi,se,zo);
 		var jj=jd(ye,mo,da,uu);
 		var T=jj/36525;
-		var k=Math.PI/180.0;
+
+		var omega0 = 55.199;
+		var omega = omega0 - 1934.14*T;
+		var deltaPsi = -0.00479 * Math.sin(omega);
+		var deltaEps = 0.00266 * Math.cos(omega);
+		var eps0 = 23.4412;
+		var eps = eps0 - 0.013012 * T + deltaEps;
+
+
+		var deltaAlphaPR = (1.2808 + 0.5566 * Math.tan(beta) * Math.sin(alpha))*T;
+		var deltaBetaPR = 0.5566 * Math.cos(alpha) * T;
+
+		var deltaAlphaN = deltaPsi * Math.cos(eps) + Math.sin(eps) * Math.sin(alpha) * Math.tan(beta) - deltaEps * Math.tan(beta) * Math.cos(alpha);
+		var deltaBetaN = deltaPsi * Math.sin(eps) * Math.cos(alpha) + deltaEps * Math.sin(alpha);
+
+		var L0 = 279.6034;
+		var deltaL = 36000 * T + 0.768925 * T;
+		var L = L0 + deltaL;
+
+		var deltaAlphaA = -0.0057 * Math.sec(beta) * (Math.sin(L) * Math.cos(eps) + Math.cos(L) * Math.cos(alpha) * Math.cos(eps));
+		var deltaBetaA = -0.0057 * Math.sin(L) * Math.cos(alpha) * Math.sin(beta) + Math.cos(L) * ( Math.sin(eps) * Math.cos(beta) + Math.cos(eps) * Math.cos(alpha) * Math.sin(beta));
+
+		var S0 = 99.6056;
+
+		var tgr = S0 + deltaL + deltaPsi * Math.cos(eps);
+
+		tgr = (tgr > 360) ? (tgr/360 - Math.round(tgr/360)) * 360 - 180 : tgr;
+		tgr = (tgr < 360) ? tgr + 360 : tgr;
+
+		var ra = alpha + deltaAlphaA + deltaAlphaN + deltaAlphaPR;
+		var dec = beta + deltaBetaA + deltaBetaN + deltaBetaPR;
+
+		var tgrs = tgr + 360.98565 * ((ho-zo+mi/60+se/3600)/24) - alpha;
+		var tm = tgrs + lg;
+
+		//console.log(tgrs)
+
+		/*var k=Math.PI/180.0;
 		var deltaAlphaPR = (1.2808 + 0.5566 * Math.tan(beta) * Math.sin(alpha))*T;
 		var deltaBetaPR = 0.5566 * Math.cos(alpha) * T;
 		var M=357.5291+35999.0503*T-0.0001559*T*T-0.00000045*T*T*T;
@@ -235,13 +304,13 @@ jQuery(document).ready(function($) {
 		tgr = (tgr+360)%360;
 		var tgrs = tgr-alphaStar+360.98565*((ho+mi/60+se/3600)/24)
 
-		var azimuth = Math.deg(Math.atan(Math.cos(Math.rad(lg)) * Math.tan(Math.rad(alphaStar)) * Math.cosec(Math.rad(tgrs)) - Math.sin(Math.rad(lg)) * Math.cot(Math.rad(tgrs))));
+		var azimuth = Math.deg(Math.atan(Math.cos(Math.rad(lg)) * Math.tan(Math.rad(alphaStar)) * Math.cosec(Math.rad(tgrs)) - Math.sin(Math.rad(lg)) * Math.cot(Math.rad(tgrs))));*/
 
 		return {
-			ha		: tgrs,
+			/*ha		: tgrs,
 			ra		: alphaStar,
 			dec		: betaStar,
-			azimuth	: azimuth
+			azimuth	: azimuth*/
 		};
 	}
 
